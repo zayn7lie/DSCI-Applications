@@ -47,7 +47,7 @@ def inference(input_image):
 inputs = gr.inputs.Image(type='pil')
 outputs = gr.outputs.Label(type="confidences",num_top_classes=5)
 
-title = "ResNet"
+title = "ResNet-50 with MMD"
 description = "Gradio demo for ResNet, Deep residual networks pre-trained on ImageNet. To use it, simply upload your image, or click one of the examples to load them. Read more at the links below."
 
 article = "<p style='text-align: center'><a href='https://arxiv.org/abs/1512.03385' target='_blank'>Deep Residual Learning for Image Recognition</a> | <a href='https://github.com/pytorch/vision/blob/main/torchvision/models/resnet.py' target='_blank'>Github Repo</a></p>"

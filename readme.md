@@ -2,5 +2,6 @@
 - numpy
 - xlrd
 - torch
+- torchvision
 - gradio
 - scikit-learn
