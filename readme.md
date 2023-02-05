@@ -2,7 +2,5 @@
 - numpy
 - xlrd
 - torch
-
-- not necessary
-    - gradio
-    - scikit-learn
+- gradio
+- scikit-learn
