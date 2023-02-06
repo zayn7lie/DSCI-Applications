@@ -1,6 +1,6 @@
 ### requirement(pip install)
 - numpy
-- xlrd
+- xlrd==1.2.0
 - torch
 - torchvision
 - gradio
