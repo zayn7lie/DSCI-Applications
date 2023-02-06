@@ -1,6 +1,6 @@
 import numpy as np
 import xlrd
-import ResNet
+# import ResNet
 
 def rData(filepath):
     data = xlrd.open_workbook(filepath)
@@ -10,4 +10,6 @@ def rData(filepath):
     #data: num, bool: NDGCAHMO
 
 if __name__ == "__main__":
+    data = rData("./GitHub/ML-RMMD/OIA-ODIR/Off-site Test Set/Annotation/off-site test annotation (English).xlsx")
+    d = data.flatten()
     print("finished")
