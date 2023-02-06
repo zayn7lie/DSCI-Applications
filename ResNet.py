@@ -15,9 +15,7 @@ from torchvision.models._utils import _ovewrite_named_param, handle_legacy_inter
 __all__ = [
     "ResNet",
     "ResNet50_Weights",
-    "Wide_ResNet50_2_Weights",
-    "resnet50",
-    "wide_resnet50_2"
+    "resnet50"
 ]
 
 
@@ -335,48 +333,6 @@ class ResNet50_Weights(WeightsEnum):
     )
     DEFAULT = IMAGENET1K_V2
 
-class Wide_ResNet50_2_Weights(WeightsEnum):
-    IMAGENET1K_V1 = Weights(
-        url="https://download.pytorch.org/models/wide_resnet50_2-95faca4d.pth",
-        transforms=partial(ImageClassification, crop_size=224),
-        meta={
-            **_COMMON_META,
-            "num_params": 68883240,
-            "recipe": "https://github.com/pytorch/vision/pull/912#issue-445437439",
-            "_metrics": {
-                "ImageNet-1K": {
-                    "acc@1": 78.468,
-                    "acc@5": 94.086,
-                }
-            },
-            "_ops": 11.398,
-            "_file_size": 131.82,
-            "_docs": """These weights reproduce closely the results of the paper using a simple training recipe.""",
-        },
-    )
-    IMAGENET1K_V2 = Weights(
-        url="https://download.pytorch.org/models/wide_resnet50_2-9ba9bcbe.pth",
-        transforms=partial(ImageClassification, crop_size=224, resize_size=232),
-        meta={
-            **_COMMON_META,
-            "num_params": 68883240,
-            "recipe": "https://github.com/pytorch/vision/issues/3995#new-recipe-with-fixres",
-            "_metrics": {
-                "ImageNet-1K": {
-                    "acc@1": 81.602,
-                    "acc@5": 95.758,
-                }
-            },
-            "_ops": 11.398,
-            "_file_size": 263.124,
-            "_docs": """
-                These weights improve upon the results of the original paper by using TorchVision's `new training recipe
-                <https://pytorch.org/blog/how-to-train-state-of-the-art-models-using-torchvision-latest-primitives/>`_.
-            """,
-        },
-    )
-    DEFAULT = IMAGENET1K_V2
-
 @register_model()
 @handle_legacy_interface(weights=("pretrained", ResNet50_Weights.IMAGENET1K_V1))
 def resnet50(*, weights: Optional[ResNet50_Weights] = None, progress: bool = True, **kwargs: Any) -> ResNet:
@@ -405,38 +361,6 @@ def resnet50(*, weights: Optional[ResNet50_Weights] = None, progress: bool = Tru
 
     return _resnet(Bottleneck, [3, 4, 6, 3], weights, progress, **kwargs)
 
-@register_model()
-@handle_legacy_interface(weights=("pretrained", Wide_ResNet50_2_Weights.IMAGENET1K_V1))
-def wide_resnet50_2(
-    *, weights: Optional[Wide_ResNet50_2_Weights] = None, progress: bool = True, **kwargs: Any
-) -> ResNet:
-    """Wide ResNet-50-2 model from
-    `Wide Residual Networks <https://arxiv.org/abs/1605.07146>`_.
-    The model is the same as ResNet except for the bottleneck number of channels
-    which is twice larger in every block. The number of channels in outer 1x1
-    convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-    channels, and in Wide ResNet-50-2 has 2048-1024-2048.
-    Args:
-        weights (:class:`~torchvision.models.Wide_ResNet50_2_Weights`, optional): The
-            pretrained weights to use. See
-            :class:`~torchvision.models.Wide_ResNet50_2_Weights` below for
-            more details, and possible values. By default, no pre-trained
-            weights are used.
-        progress (bool, optional): If True, displays a progress bar of the
-            download to stderr. Default is True.
-        **kwargs: parameters passed to the ``torchvision.models.resnet.ResNet``
-            base class. Please refer to the `source code
-            <https://github.com/pytorch/vision/blob/main/torchvision/models/resnet.py>`_
-            for more details about this class.
-    .. autoclass:: torchvision.models.Wide_ResNet50_2_Weights
-        :members:
-    """
-    weights = Wide_ResNet50_2_Weights.verify(weights)
-
-    _ovewrite_named_param(kwargs, "width_per_group", 64 * 2)
-    return _resnet(Bottleneck, [3, 4, 6, 3], weights, progress, **kwargs)
-
-
 # The dictionary below is internal implementation detail and will be removed in v0.15
 from torchvision.models._utils import _ModelURLs
 
@@ -444,6 +368,5 @@ from torchvision.models._utils import _ModelURLs
 model_urls = _ModelURLs(
     {
         "resnet50": ResNet50_Weights.IMAGENET1K_V1.url,
-        "wide_resnet50_2": Wide_ResNet50_2_Weights.IMAGENET1K_V1.url
     }
 )
