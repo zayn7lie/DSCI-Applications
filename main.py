@@ -1,4 +1,4 @@
-''' change working directory 
+#''' change working directory 
 import os
 
 os.chdir("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
@@ -6,7 +6,7 @@ print('current working directory is {}'.format(os.getcwd()))
 
 print(os.getcwd())
 print(os.listdir(os.getcwd()))
-'''
+#'''
 
 import numpy as np
 # import ResNet
@@ -16,7 +16,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 Transform = transforms.Compose([
-    transforms.Resize(512), # short l -> 2048
+    transforms.Resize(512), # short l -> 512
     transforms.CenterCrop(512), # crop
     transforms.ToTensor(),
     # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
