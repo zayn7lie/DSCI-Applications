@@ -1,12 +1,6 @@
-import xlrd
 import numpy as np
-
-def rxl(filepath):
-    data = xlrd.open_workbook(filepath)
-    table = data.sheets()[0]
-    data = [ [int(table.row_values(i,0,1)[0])] + table.row_values(i,-8) for i in range(1,table.nrows)]
-    return np.array(data)
-    # data: num, bool: NDGCAHMO
+import pandas as pd
+# data: num, bool: NDGCAHMO
 
 import torch
 from torch.utils.data import Dataset
@@ -20,4 +14,3 @@ class getdata(Dataset):
             transforms.ToTensor(),
             # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
         ])
-        lab = rxl(path_lab)
