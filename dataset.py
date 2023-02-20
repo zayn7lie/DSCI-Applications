@@ -1,11 +1,11 @@
+from torch.utils.data import Dataset
+from torchvision import transforms
+
 import numpy as np
 import csv
 
-import torch
-from torchvision import transforms
-
-from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
+
 class odirData(Dataset):
     def __init__(self, path):
         self.path = path
