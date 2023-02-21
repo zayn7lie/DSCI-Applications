@@ -4,7 +4,7 @@ from torchvision import transforms
 import numpy as np
 import csv
 
-import matplotlib.pyplot as plt
+from PIL import Image
 
 class odirData(Dataset):
     def __init__(self, path):
@@ -33,7 +33,8 @@ class odirData(Dataset):
         img_name = self.img_folder + "/" + self.filenames[index]
         label = self.labels[index]
         
-        img = plt.imread(img_name)
+        # img = plt.imread(img_name)
+        img = Image.open(img_name).convert('RGB')
         img = self.transform(img)
 
         return img, label
