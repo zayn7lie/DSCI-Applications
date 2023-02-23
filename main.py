@@ -13,28 +13,26 @@ import torch
 from torch.utils.data import DataLoader
 from torch import nn
 from torch import optim
-from torch.autograd import Variable
-import torchvision
+# import torchvision
+from model import Resnet50
 
 # para setting
 modellr = 1e-4
-BATCH_SIZE = 20
+BATCH_SIZE = 1
 EPOCHS = 20
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-# model create
-criterion = nn.BCELoss()
-model = torchvision.models.resnet50()
-num_ftrs = model.fc.in_features
-model.fc = nn.Linear(num_ftrs, 8)
-model.to(DEVICE)
-optimizer = optim.Adam(model.parameters(), lr=modellr)
 
 # load data
 train_dataset = odirData("./OIA-ODIR/Training Set")
 test_dataset = odirData("./OIA-ODIR/Off-site Test Set")
 train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True)
 test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True)
+
+# model create
+criterion = nn.BCELoss()
+model = Resnet50(len(train_dataset))
+model.to(DEVICE)
+optimizer = optim.Adam(model.parameters(), lr=modellr)
 
 def lrAdjust(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
@@ -48,19 +46,24 @@ def train(model, device, train_loader, optimizer, epoch):
     sum_loss = 0
     total_num = len(train_loader.dataset)
     print(total_num, len(train_loader))
-    for batch_idx, (data, targets) in enumerate(train_loader):
-        data = Variable(data).to(device)
-        output = model(data)
-        loss = criterion(output, targets.type(torch.float)) # criterion = nn.BCELoss()
-        loss.backward()
+    for batch_idx, (imgs, targets) in enumerate(train_loader):
+        imgs, targets = imgs.to(device), targets.to(device)
+
         optimizer.zero_grad()
+
+        output = model(imgs)
+        loss = criterion(output, targets.type(torch.float)) # criterion = nn.BCELoss()
+
+        print_loss = loss.item()
+
+        loss.backward()
         optimizer.step()
-        print_loss = loss.data.item()
         sum_loss += print_loss
         if (batch_idx + 1) % 50 == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, (batch_idx + 1) * len(data), len(train_loader.dataset),
+                epoch, (batch_idx + 1) * len(imgs), len(train_loader.dataset),
                        100. * (batch_idx + 1) / len(train_loader), loss.item()))
+
     ave_loss = sum_loss / len(train_loader)
     print('epoch:{},loss:{}'.format(epoch, ave_loss))
 
