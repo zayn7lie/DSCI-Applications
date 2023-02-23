@@ -18,7 +18,7 @@ from model import Resnet50
 
 # para setting
 modellr = 1e-4
-BATCH_SIZE = 1
+BATCH_SIZE = 20
 EPOCHS = 20
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
