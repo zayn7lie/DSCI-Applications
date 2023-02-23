@@ -1,7 +1,7 @@
 #''' change working directory 
 import os
 
-os.chdir("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
+# os.chdir("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
 print('current working directory is {}'.format(os.getcwd()))
 
 print(os.getcwd())
