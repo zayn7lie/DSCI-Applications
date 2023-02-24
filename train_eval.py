@@ -69,7 +69,7 @@ def eval(model, device, test_loader, BATCH_SIZE):
             output, targets = output.cpu().numpy(), targets.cpu().numpy()
             # print(output, targets)
             for i in range(BATCH_SIZE):
-                for j in len(output[i]):
+                for j in range(len(output[i])):
                     if output[i][j] >= 0.5: output[i][j] = 1
                     else: output[i][j] = 0
                 kappa += cohen_kappa_score(targets[i], output[i])
