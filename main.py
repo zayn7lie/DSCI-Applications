@@ -34,7 +34,7 @@ def main():
         optimizer = optim.Adam(model.parameters(), lr=modellr)
         for epoch in range(1, EPOCHS + 1):
             adjust_lr(optimizer, epoch, modellr)
-            train(model, DEVICE, train_loader, optimizer, epoch)
+            train(model, DEVICE, train_loader, optimizer)
         # torch.save(model.state_dict(), "/ML-RMMD")
         
     
