@@ -3,7 +3,7 @@ from torch import nn
 
 def adjust_lr(optimizer, epoch, modellr):
     modellrnew = modellr * (0.1 ** (epoch // 25))
-    print("Epoch:", epoch, "\tLearning Rate:", modellrnew)
+    print("Epoch:", epoch, "Learning Rate:", modellrnew)
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
@@ -33,16 +33,14 @@ def train(model, device, train_loader, optimizer, epoch):
         loss.backward()
         optimizer.step()
         
-        if (batch_idx + 1) % 10 == 0:
-            print('\t[{}/{} ({:.0f}%)]Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}'.format(
-                (batch_idx + 1) * len(imgs), len(train_loader.dataset),
-                       100. * (batch_idx + 1) / len(train_loader), sumloss / 20, maxloss, minloss))
+        if (batch_idx + 1) % 4 == 0:
+            print("- [{}/{} ({:.0f}%)] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1) * len(imgs), len(train_loader.dataset), 100. * (batch_idx + 1) / len(train_loader), sumloss / 20, maxloss, minloss))
             sumloss = 0
             minloss = 1
             maxloss = 0
 
     avg_loss = sum_loss / len(train_loader)
-    print('Epoch: {}\tLoss:{}\t'.format(epoch, avg_loss))
+    print("Loss:", avg_loss, '\n')
 
 from sklearn.metrics import cohen_kappa_score
 from sklearn.metrics import f1_score
@@ -78,4 +76,4 @@ def eval(model, device, test_loader):
         avgkappa = 1.000 * kappa / len(test_loader)
         avgf1 = 1.000 * f1 / len(test_loader)
         avgauc = 1.000 * auc / len(test_loader)
-        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n', avgloss, avgkappa, avgf1, avgauc)
+        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n'.format(avgloss, avgkappa, avgf1, avgauc))
