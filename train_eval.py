@@ -66,14 +66,15 @@ def eval(model, device, test_loader, BATCH_SIZE):
             print_loss = loss.data.item()
             test_loss += print_loss
 
-            output, targets = output.cpu().numpy(), targets.cpu().numpy()
+            output = output.cpu().numpy()
+            targets = targets.cpu().numpy()
             # print(output, targets)
-            print(targets[1], output[1])
             for i in range(BATCH_SIZE):
                 for j in range(len(output[i])):
                     if output[i][j] >= 0.5: output[i][j] = 1
                     else: output[i][j] = 0
                 
+                print(targets[i], output[i])
                 kappa += cohen_kappa_score(targets[i].tolist(), output[i].tolist())
                 f1 += f1_score(targets[i].tolist(), output[i].tolist())
                 auc += roc_auc_score(targets[i].tolist(), output[i].tolist())

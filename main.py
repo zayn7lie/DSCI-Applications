@@ -19,7 +19,7 @@ def main():
     # load data
     train_dataset = odirData("./OIA-ODIR/On-site Test Set")
     test_dataset = odirData("./OIA-ODIR/Off-site Test Set")
-    train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True, num_workers=4)
+    train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True, num_workers=8)
     test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True, num_workers=4)
     print('Train_dataset size:', len(train_dataset), "=", len(train_loader), "*", BATCH_SIZE)
     print('Test_dataset size:', len(test_dataset), "=", len(test_loader), "*", BATCH_SIZE, '\n')
