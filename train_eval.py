@@ -75,7 +75,7 @@ def eval(model, device, test_loader):
             auc += roc_auc_score(targets, output)
             print(kappa, f1, auc)
         avgloss = test_loss / cnt
-        avgkappa = kappa / cnt
-        avgf1 = f1 / cnt
-        avgauc = auc / cnt
-        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n'.format(avgloss, avgkappa, avgf1, avgauc))
+        avgkappa = kappa * 100 / cnt
+        avgf1 = f1 * 100 / cnt
+        avgauc = auc * 100 / cnt
+        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f}% Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgkappa, avgf1, avgauc))
