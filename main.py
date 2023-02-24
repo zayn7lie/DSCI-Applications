@@ -17,7 +17,7 @@ def main():
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load data
-    train_dataset = odirData("./OIA-ODIR/On-site Test Set")
+    train_dataset = odirData("./OIA-ODIR/Training Set")
     test_dataset = odirData("./OIA-ODIR/Off-site Test Set")
     train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
     test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
