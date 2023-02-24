@@ -11,16 +11,16 @@ def main():
     # workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
 
     # para setting
-    modellr = 4 * 1e-4
-    BATCH_SIZE = 72
+    modellr = 1e-4
+    BATCH_SIZE = 75
     EPOCHS = 1 # 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load data
     train_dataset = odirData("./OIA-ODIR/On-site Test Set")
     test_dataset = odirData("./OIA-ODIR/Off-site Test Set")
-    train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True, num_workers=0)
-    test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True, num_workers=0)
+    train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
+    test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
     print('Train_dataset size:', len(train_dataset), "=", len(train_loader), "*", BATCH_SIZE)
     print('Test_dataset size:', len(test_dataset), "=", len(test_loader), "*", BATCH_SIZE, '\n')
 
