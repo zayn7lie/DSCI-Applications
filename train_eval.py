@@ -50,14 +50,13 @@ import numpy
 def eval(model, device, test_loader):
     criterion = nn.BCELoss()
     model.eval()
-    test_loss = 0
-    kappa = 0
-    f1 = 0
-    auc = 0
+    test_loss, cnt = 0, 0
+    kappa, f1, auc = 0, 0, 0
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
     with torch.no_grad():
         for imgs, targets in test_loader:
+            cnt += 1
             imgs, targets = imgs.to(device), targets.to(device)
 
             output = model(imgs)
@@ -66,22 +65,17 @@ def eval(model, device, test_loader):
             print_loss = loss.data.item()
             test_loss += print_loss
 
-            output = output.cpu().numpy()
-            targets = targets.cpu().numpy()
-            # print(output, targets)
-            for i in range(numpy.size(targets, 0)):
-                print(targets[i], output[i])
-                for j in range(numpy.size(targets, 1)):
-                    if output[i, j] >= 0.5: output[i, j] = 1
-                    else: output[i, j] = 0
-                
-                print(targets[i], output[i])
-                kappa += cohen_kappa_score(targets[i], output[i])
-                f1 += f1_score(targets[i], output[i])
-                auc += roc_auc_score(targets[i], output[i])
-                print(kappa, f1, auc)
-        avgloss = test_loss / len(test_loader)
-        avgkappa = kappa / len(test_loader)
-        avgf1 = f1 / len(test_loader)
-        avgauc = auc / len(test_loader)
+            output = output.cpu().numpy().flat
+            targets = targets.cpu().numpy().flat
+            for i in range(len(output)):
+                if output[i] >= 0.5: output[i] = 1
+                else: output[i] = 0
+            kappa += cohen_kappa_score(targets, output)
+            f1 += f1_score(targets, output)
+            auc += roc_auc_score(targets, output)
+            print(kappa, f1, auc)
+        avgloss = test_loss / cnt
+        avgkappa = kappa / cnt
+        avgf1 = f1 / cnt
+        avgauc = auc / cnt
         print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n'.format(avgloss, avgkappa, avgf1, avgauc))
