@@ -1,13 +1,6 @@
 import torch
 from torch import nn
 
-def lrAdjust(modellr, optimizer, epoch):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    modellrnew = modellr * (0.1 ** (epoch // 50))
-    print("lr:", modellrnew)
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = modellrnew
-
 def train(model, device, train_loader, optimizer, epoch):
     criterion = nn.BCELoss()
     model.train()

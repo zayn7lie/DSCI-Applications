@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch import optim
 from model import Resnet50
-from train_eval import lrAdjust, train, eval
+from train_eval import train, eval
 from tools import workDirChanger
 import os
 
@@ -30,7 +30,6 @@ def main():
     else: 
         optimizer = optim.Adam(model.parameters(), lr=modellr)
         for epoch in range(1, EPOCHS + 1):
-            lrAdjust(modellr, optimizer, epoch)
             train(model, DEVICE, train_loader, optimizer, epoch)
         torch.save(model.state_dict(), "./modelCache")
         
