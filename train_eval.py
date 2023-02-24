@@ -1,10 +1,5 @@
-from dataset import odirData
 import torch
-from torch.utils.data import DataLoader
 from torch import nn
-from torch import optim
-# import torchvision
-from model import Resnet50
 
 def lrAdjust(modellr, optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
