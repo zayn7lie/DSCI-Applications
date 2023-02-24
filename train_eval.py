@@ -5,7 +5,7 @@ def train(model, device, train_loader, optimizer, epoch):
     criterion = nn.BCELoss()
     model.train()
     sum_loss = 0
-    total_num = len(train_loader.dataset)
+    # total_num = len(train_loader.dataset)
     # print(total_num, len(train_loader))
     for batch_idx, (imgs, targets) in enumerate(train_loader):
         imgs, targets = imgs.to(device), targets.to(device)
@@ -39,7 +39,7 @@ def eval(model, device, test_loader):
     kappa = 0
     f1 = 0
     auc = 0
-    total_num = len(test_loader.dataset)
+    # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
     with torch.no_grad():
         for imgs, targets in test_loader:
