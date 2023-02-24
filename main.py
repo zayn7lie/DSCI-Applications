@@ -12,7 +12,7 @@ def main():
 
     # para setting
     modellr = 4 * 1e-4
-    BATCH_SIZE = 70
+    BATCH_SIZE = 120
     EPOCHS = 1 # 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -38,7 +38,7 @@ def main():
         # torch.save(model.state_dict(), "/ML-RMMD")
         
     
-    eval(model, DEVICE, test_loader)
+    eval(model, DEVICE, test_dataset)
 
     return 0
 
