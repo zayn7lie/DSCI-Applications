@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 def adjust_lr(optimizer, epoch, modellr):
-    modellrnew = modellr * (0.1 ** (epoch // 25))
+    modellrnew = modellr * (0.1 ** (epoch // 5))
     print("Epoch:", epoch, "Learning Rate:", modellrnew)
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
@@ -33,8 +33,8 @@ def train(model, device, train_loader, optimizer, epoch):
         loss.backward()
         optimizer.step()
         
-        if (batch_idx + 1) % 4 == 0:
-            print("- [{}/{} ({:.0f}%)] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1) * len(imgs), len(train_loader.dataset), 100. * (batch_idx + 1) / len(train_loader), sumloss / 20, maxloss, minloss))
+        if (batch_idx + 1) % 5 == 0:
+            print("- [{}/{} ({:.0f}%)] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1) * len(imgs), len(train_loader.dataset), 100. * (batch_idx + 1) / len(train_loader), sumloss / 5, maxloss, minloss))
             sumloss = 0
             minloss = 1
             maxloss = 0
