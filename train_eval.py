@@ -69,8 +69,11 @@ def eval(model, device, test_loader, BATCH_SIZE):
             output = output.cpu().numpy()
             targets = targets.cpu().numpy()
             # print(output, targets)
-            for i in range(BATCH_SIZE):
-                for j in range(len(output[i])):
+            x = numpy.size(targets, 0)
+            y = numpy.size(targets, 1)
+            for i in range(x):
+                print(targets[i], output[i])
+                for j in range(y):
                     if output[i, j] >= 0.5: output[i, j] = 1
                     else: output[i, j] = 0
                 
