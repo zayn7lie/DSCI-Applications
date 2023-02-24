@@ -12,7 +12,7 @@ def main():
 
     # para setting
     modellr = 4 * 1e-4
-    BATCH_SIZE = 100
+    BATCH_SIZE = 64
     EPOCHS = 1 # 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
