@@ -47,7 +47,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 import numpy
 
-def eval(model, device, test_loader):
+def eval(model, device, test_loader, BATCH_SIZE):
     criterion = nn.BCELoss()
     model.eval()
     test_loss = 0
@@ -68,12 +68,13 @@ def eval(model, device, test_loader):
 
             output, targets = output.cpu().numpy(), targets.cpu().numpy()
             print(output, targets)
-            for i in range(output):
-                if output[i] >= 0.5: output[i] = 1
-                else: output[i] = 0
-            kappa += cohen_kappa_score(targets, output)
-            f1 += f1_score(targets, output)
-            auc += roc_auc_score(targets, output)
+            for i in range(BATCH_SIZE):
+                for j in range(output[i]):
+                    if output[i][j] >= 0.5: output[i][j] = 1
+                    else: output[i][j] = 0
+                kappa += cohen_kappa_score(targets[i], output[i])
+                f1 += f1_score(targets[i], output[i])
+                auc += roc_auc_score(targets[i], output[i])
         avgloss = 1.000 * test_loss / len(test_loader)
         avgkappa = 1.000 * kappa / len(test_loader)
         avgf1 = 1.000 * f1 / len(test_loader)
