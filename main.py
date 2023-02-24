@@ -22,7 +22,7 @@ def main():
     train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True)
     print('train_dataset size:', len(train_dataset), len(train_loader))
-    print('test_dataset size:', len(test_loader), len(train_loader))
+    print('test_dataset size:', len(test_dataset), len(train_loader))
 
 
     # model load or create
