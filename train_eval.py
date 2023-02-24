@@ -47,7 +47,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 import numpy
 
-def eval(model, device, test_loader, BATCH_SIZE):
+def eval(model, device, test_loader):
     criterion = nn.BCELoss()
     model.eval()
     test_loss = 0
@@ -69,20 +69,19 @@ def eval(model, device, test_loader, BATCH_SIZE):
             output = output.cpu().numpy()
             targets = targets.cpu().numpy()
             # print(output, targets)
-            x = numpy.size(targets, 0)
-            y = numpy.size(targets, 1)
-            for i in range(x):
+            for i in range(numpy.size(targets, 0)):
                 print(targets[i], output[i])
-                for j in range(y):
+                for j in range(numpy.size(targets, 1)):
                     if output[i, j] >= 0.5: output[i, j] = 1
                     else: output[i, j] = 0
                 
                 print(targets[i], output[i])
                 kappa += cohen_kappa_score(targets[i], output[i])
                 f1 += f1_score(targets[i], output[i])
-                # auc += roc_auc_score(targets[i], output[i])
+                auc += roc_auc_score(targets[i], output[i])
+                print(kappa, f1, auc)
         avgloss = test_loss / len(test_loader)
         avgkappa = kappa / len(test_loader)
         avgf1 = f1 / len(test_loader)
-        # avgauc = auc / len(test_loader)
-        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: \n'.format(avgloss, avgkappa, avgf1))
+        avgauc = auc / len(test_loader)
+        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n'.format(avgloss, avgkappa, avgf1, avgauc))
