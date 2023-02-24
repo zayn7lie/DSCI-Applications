@@ -35,6 +35,7 @@ def main():
         for epoch in range(1, EPOCHS + 1):
             adjust_lr(optimizer, epoch, modellr)
             train(model, DEVICE, train_loader, optimizer, epoch)
+            adjust_lr(optimizer, epoch + 1, modellr)
         torch.save(model.state_dict(), "./modelCache")
         
     

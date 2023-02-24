@@ -3,7 +3,7 @@ from torch import nn
 
 def adjust_lr(optimizer, epoch, modellr):
     modellrnew = modellr * (0.1 ** (epoch // 25))
-    print("lr:", modellrnew)
+    print("lr:", modellrnew, "\n\n")
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
@@ -42,7 +42,7 @@ def train(model, device, train_loader, optimizer, epoch):
             maxloss = 0
 
     avg_loss = sum_loss / len(train_loader)
-    print('Epoch: {}\tLoss:{}\n\n'.format(epoch, avg_loss))
+    print('Epoch: {}\tLoss:{}\t'.format(epoch, avg_loss))
 
 from sklearn.metrics import cohen_kappa_score
 from sklearn.metrics import f1_score
