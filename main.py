@@ -28,14 +28,14 @@ def main():
     # model load or create
     model = Resnet50(len(train_dataset))
     model.to(DEVICE)
-    if os.listdir("./modelCache.zip"):
+    if 0 # os.listdir("./modelCache.zip"):
         model = model.load_state_dict(torch.load("./modelCache"))
     else: 
         optimizer = optim.Adam(model.parameters(), lr=modellr)
         for epoch in range(1, EPOCHS + 1):
             adjust_lr(optimizer, epoch, modellr)
             train(model, DEVICE, train_loader, optimizer, epoch)
-        torch.save(model.state_dict(), "./modelCache.zip")
+        # torch.save(model.state_dict(), "/ML-RMMD")
         
     
     eval(model, DEVICE, test_loader)
