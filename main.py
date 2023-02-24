@@ -8,12 +8,12 @@ from tools import workDirChanger
 import os
 
 def main():
-    workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
+    # workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
 
     # para setting
     modellr = 1e-4
     BATCH_SIZE = 20
-    EPOCHS = 1
+    EPOCHS = 1 # 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load data
