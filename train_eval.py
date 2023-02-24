@@ -3,7 +3,7 @@ from torch import nn
 
 def adjust_lr(optimizer, epoch, modellr):
     modellrnew = modellr * (0.1 ** (epoch // 25))
-    print("lr:", modellrnew, "\n\n")
+    print("Epoch:", epoch, "\tLearning Rate:", modellrnew)
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
