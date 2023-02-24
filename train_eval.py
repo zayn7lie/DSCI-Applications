@@ -72,9 +72,9 @@ def eval(model, device, test_loader, BATCH_SIZE):
                 for j in range(len(output[i])):
                     if output[i][j] >= 0.5: output[i][j] = 1
                     else: output[i][j] = 0
-                kappa += cohen_kappa_score(targets[i], output[i])
-                f1 += f1_score(targets[i], output[i])
-                auc += roc_auc_score(targets[i], output[i])
+                kappa += cohen_kappa_score(targets[i].tolist(), output[i].tolist())
+                f1 += f1_score(targets[i].tolist(), output[i].tolist())
+                auc += roc_auc_score(targets[i].tolist(), output[i].tolist())
         avgloss = 1.000 * test_loss / len(test_loader)
         avgkappa = 1.000 * kappa / len(test_loader)
         avgf1 = 1.000 * f1 / len(test_loader)
