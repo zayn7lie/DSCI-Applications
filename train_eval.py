@@ -7,7 +7,7 @@ def adjust_lr(optimizer, epoch, modellr):
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
-def train(model, device, train_loader, optimizer, epoch):
+def train(model, device, train_loader, optimizer):
     criterion = nn.BCELoss()
     model.train()
     sum_loss = 0
