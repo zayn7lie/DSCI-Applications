@@ -34,9 +34,9 @@ def train(model, device, train_loader, optimizer, epoch):
         optimizer.step()
         
         if (batch_idx + 1) % 20 == 0:
-            print('\t[{}/{} ({:.0f}%)]\tLoss: MAX={:.6f} MIN={:.6f} AVG={:.6f}'.format(
+            print('\t[{}/{} ({:.0f}%)]Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}'.format(
                 (batch_idx + 1) * len(imgs), len(train_loader.dataset),
-                       100. * (batch_idx + 1) / len(train_loader), maxloss, minloss, sumloss / 20))
+                       100. * (batch_idx + 1) / len(train_loader), sumloss / 20, maxloss, minloss))
             sumloss = 0
             minloss = 1
             maxloss = 0
