@@ -13,7 +13,7 @@ def main():
     # para setting
     modellr = 1e-4
     BATCH_SIZE = 20
-    EPOCHS = 30
+    EPOCHS = 50
     DEVICE = torch.device('cuda') #'cpu'
 
     # load data
@@ -21,6 +21,9 @@ def main():
     test_dataset = odirData("./OIA-ODIR/Off-site Test Set")
     train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(test_dataset, BATCH_SIZE, shuffle=True)
+    print('train_dataset size:', len(train_dataset), len(train_loader))
+    print('test_dataset size:', len(test_loader), len(train_loader))
+
 
     # model load or create
     model = Resnet50(len(train_dataset))
