@@ -71,15 +71,15 @@ def eval(model, device, test_loader, BATCH_SIZE):
             # print(output, targets)
             for i in range(BATCH_SIZE):
                 for j in range(len(output[i])):
-                    if output[i][j] >= 0.5: output[i][j] = 1
-                    else: output[i][j] = 0
+                    if output[i, j] >= 0.5: output[i, j] = 1
+                    else: output[i, j] = 0
                 
                 print(targets[i], output[i])
-                kappa += cohen_kappa_score(targets[i].tolist(), output[i].tolist())
-                f1 += f1_score(targets[i].tolist(), output[i].tolist())
-                auc += roc_auc_score(targets[i].tolist(), output[i].tolist())
-        avgloss = 1.000 * test_loss / len(test_loader)
-        avgkappa = 1.000 * kappa / len(test_loader)
-        avgf1 = 1.000 * f1 / len(test_loader)
-        avgauc = 1.000 * auc / len(test_loader)
+                kappa += cohen_kappa_score(targets[i], output[i])
+                f1 += f1_score(targets[i], output[i])
+                auc += roc_auc_score(targets[i], output[i])
+        avgloss = test_loss / len(test_loader)
+        avgkappa = kappa / len(test_loader)
+        avgf1 = f1 / len(test_loader)
+        avgauc = auc / len(test_loader)
         print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n'.format(avgloss, avgkappa, avgf1, avgauc))
