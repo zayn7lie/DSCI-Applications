@@ -3,18 +3,18 @@ import torch
 from torch.utils.data import DataLoader
 from torch import optim
 from model import Resnet50
-from train_eval import train, eval
+from train_eval import train, eval, adjust_lr
 from tools import workDirChanger
 import os
 
 def main():
-    # workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
+    workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
 
     # para setting
     modellr = 1e-4
     BATCH_SIZE = 20
-    EPOCHS = 50
-    DEVICE = torch.device('cuda') #'cpu'
+    EPOCHS = 1
+    DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load data
     train_dataset = odirData("./OIA-ODIR/Training Set")
@@ -33,6 +33,7 @@ def main():
     else: 
         optimizer = optim.Adam(model.parameters(), lr=modellr)
         for epoch in range(1, EPOCHS + 1):
+            adjust_lr(optimizer, epoch, modellr)
             train(model, DEVICE, train_loader, optimizer, epoch)
         torch.save(model.state_dict(), "./modelCache")
         

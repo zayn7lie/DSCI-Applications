@@ -1,10 +1,19 @@
 import torch
 from torch import nn
 
+def adjust_lr(optimizer, epoch, modellr):
+    modellrnew = modellr * (0.1 ** (epoch // 25))
+    print("lr:", modellrnew)
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = modellrnew
+
 def train(model, device, train_loader, optimizer, epoch):
     criterion = nn.BCELoss()
     model.train()
     sum_loss = 0
+    sumloss = 0
+    minloss = 1
+    maxloss = 0
     # total_num = len(train_loader.dataset)
     # print(total_num, len(train_loader))
     for batch_idx, (imgs, targets) in enumerate(train_loader):
@@ -16,17 +25,24 @@ def train(model, device, train_loader, optimizer, epoch):
         loss = criterion(output, targets.type(torch.float)) # criterion = nn.BCELoss()
 
         print_loss = loss.item()
+        minloss = min(minloss, print_loss)
+        maxloss = max(maxloss, print_loss)
+        sum_loss += print_loss
+        sumloss += print_loss
 
         loss.backward()
         optimizer.step()
-        sum_loss += print_loss
-        if (batch_idx + 1) % 50 == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+        
+        if (batch_idx + 1) % 20 == 0:
+            print('Epoch: {} [{}/{} ({:.0f}%)]\tLoss: MAX={:.6f} MIN={:.6f} AVG={:.6f}'.format(
                 epoch, (batch_idx + 1) * len(imgs), len(train_loader.dataset),
-                       100. * (batch_idx + 1) / len(train_loader), loss.item()))
+                       100. * (batch_idx + 1) / len(train_loader), maxloss, minloss, sumloss / 20))
+            sumloss = 0
+            minloss = 1
+            maxloss = 0
 
-    ave_loss = sum_loss / len(train_loader)
-    print('epoch:{},loss:{}'.format(epoch, ave_loss))
+    avg_loss = sum_loss / len(train_loader)
+    print('Epoch: {}\tLoss:{}\n\n'.format(epoch, avg_loss))
 
 from sklearn.metrics import cohen_kappa_score
 from sklearn.metrics import f1_score
