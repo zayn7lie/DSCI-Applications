@@ -45,6 +45,7 @@ def train(model, device, train_loader, optimizer, epoch):
 from sklearn.metrics import cohen_kappa_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
+import numpy
 
 def eval(model, device, test_loader):
     criterion = nn.BCELoss()
@@ -66,6 +67,7 @@ def eval(model, device, test_loader):
             test_loss += print_loss
 
             output, targets = output.cpu().numpy(), targets.cpu().numpy()
+            print(output, targets)
             for i in range(output):
                 if output[i] >= 0.5: output[i] = 1
                 else: output[i] = 0
