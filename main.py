@@ -19,7 +19,7 @@ from model import Resnet50
 # para setting
 modellr = 1e-4
 BATCH_SIZE = 20
-EPOCHS = 50
+EPOCHS = 30
 DEVICE = torch.device('cuda')
 
 # load data
@@ -106,7 +106,7 @@ def main():
     for epoch in range(1, EPOCHS + 1):
         lrAdjust(optimizer, epoch)
         train(model, DEVICE, train_loader, optimizer, epoch)
-        eval(model, DEVICE, test_loader)
+    eval(model, DEVICE, test_loader)
     return 0
 
     

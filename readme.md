@@ -1,7 +1,7 @@
 ### requirement(pip install)
 - numpy
-- torch
+- pytorch(torch)
 - torchvision
-- gradio
+- Pillow
 - scikit-learn
 - matplotlib
