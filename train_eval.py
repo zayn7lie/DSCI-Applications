@@ -72,6 +72,7 @@ def eval(model, device, test_loader, BATCH_SIZE):
                 for j in range(len(output[i])):
                     if output[i][j] >= 0.5: output[i][j] = 1
                     else: output[i][j] = 0
+                print(targets[i].tolist(), output[i].tolist())
                 kappa += cohen_kappa_score(targets[i].tolist(), output[i].tolist())
                 f1 += f1_score(targets[i].tolist(), output[i].tolist())
                 auc += roc_auc_score(targets[i].tolist(), output[i].tolist())
