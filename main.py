@@ -28,7 +28,7 @@ def main():
     # model load or create
     model = Resnet50(len(train_dataset))
     model.to(DEVICE)
-    if 0 # os.listdir("./modelCache.zip"):
+    if 0: # os.listdir("./modelCache.zip"):
         model = model.load_state_dict(torch.load("./modelCache"))
     else: 
         optimizer = optim.Adam(model.parameters(), lr=modellr)
