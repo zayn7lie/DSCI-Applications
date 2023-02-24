@@ -85,4 +85,4 @@ def eval(model, device, test_loader, BATCH_SIZE):
         avgkappa = kappa / len(test_loader)
         avgf1 = f1 / len(test_loader)
         # avgauc = auc / len(test_loader)
-        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: {:.4f}\n'.format(avgloss, avgkappa, avgf1))
+        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f} Average f1: {:.4f} Average auc: \n'.format(avgloss, avgkappa, avgf1))
