@@ -6,6 +6,7 @@ from model import Resnet50
 from train_eval import train, eval, adjust_lr
 from tools import workDirChanger
 import os
+import torch_xla.core.xla_model as xm #tputraining
 
 def main():
     # workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
@@ -14,7 +15,7 @@ def main():
     modellr = 5 * 1e-4 # 1e-4
     BATCH_SIZE = 72
     EPOCHS = 20 # 50
-    DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    DEVICE = xm.xla_device() # torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load data
     train_dataset = odirData("./OIA-ODIR/Training Set")
