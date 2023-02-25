@@ -11,9 +11,9 @@ def main():
     # workDirChanger("C:/Users/zayn7lie/OneDrive - ber7/02-Prog/GitHub/ML-RMMD")
 
     # para setting
-    modellr = 1e-4
+    modellr = 5 * 1e-4 # 1e-4
     BATCH_SIZE = 72
-    EPOCHS = 50 # 50
+    EPOCHS = 20 # 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load data
