@@ -7,7 +7,7 @@ def adjust_lr(optimizer, epoch, modellr):
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
-def train(model, device, train_loader, optimizer):
+def train(epoch, model, device, train_loader, optimizer):
     criterion = nn.BCELoss()
     model.train()
     sum_loss = 0
@@ -33,14 +33,14 @@ def train(model, device, train_loader, optimizer):
         loss.backward()
         optimizer.step()
         
-        if (batch_idx + 1) % 14 == 0:
-            print("- [{:.0f}%] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format(100. * (batch_idx + 1) / len(train_loader), sumloss / 14, maxloss, minloss))
+        if (batch_idx + 1) % 3 == 0:
+            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(train_loader), sumloss / 3, maxloss, minloss))
             sumloss = 0
             minloss = 1
             maxloss = 0
 
     avg_loss = sum_loss / len(train_loader)
-    print("Loss:", avg_loss, '\n')
+    print("Epoch:", epoch, "Loss:", avg_loss, '\n')
 
 from sklearn.metrics import cohen_kappa_score
 from sklearn.metrics import f1_score
