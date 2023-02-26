@@ -21,7 +21,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
         imgs_y, _ = iter_y.__next__()
         imgs_y = imgs_y.to(device)
         cnt += 1
-        if cnt % len(tr_loader_x) == 0:
+        if cnt % len(tr_loader_y) == 0:
             iter_y = iter(tr_loader_y)
 
         optimizer.zero_grad()
