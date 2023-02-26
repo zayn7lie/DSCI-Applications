@@ -39,7 +39,7 @@ def main():
             print("K-fold:", len(tr_loader_x), "*", BATCH_SIZE, "+", len(tr_loader_y), "*", BATCH_SIZE,  "->", len(ts_loader_y), "*", BATCH_SIZE, '\n')
             
             # load model
-            model = RMMD()
+            model = Resnet50()
             model.to(DEVICE)
             if os.path.exists("./modelCache.pt"):
                 model.load_state_dict(torch.load("./modelCache.pt"))
