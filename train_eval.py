@@ -62,7 +62,7 @@ def eval(model, device, test_loader):
             cnt += 1
             imgs, targets = imgs.to(device), targets.to(device)
 
-            output = model(imgs, None)
+            output, _ = model(imgs, None)
             loss = criterion(output, targets.type(torch.float))
             
             print_loss = loss.data.item()
@@ -79,4 +79,4 @@ def eval(model, device, test_loader):
         avgloss = test_loss / cnt
         avgf1 = f1 * 100 / cnt
         avgauc = auc * 100 / cnt
-        print('\nVal set: Average loss: {:.4f} Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgf1, avgauc))
+        print('\nVal set: BCE: {:.4f} Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgf1, avgauc))
