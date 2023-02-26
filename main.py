@@ -41,7 +41,7 @@ def main():
             tr_loader = DataLoader(fr_dataset, BATCH_SIZE, num_workers=2, sampler=fr_tr_idxs)
             ts_loader = DataLoader(to_dataset, BATCH_SIZE, num_workers=2, sampler=to_ts_idxs)
             print("K-fold:", fr_idx_9, "->", to_idx_1)
-            print("K-fold:", len(tr_loader), "*", BATCH_SIZE, "->", len(to_loader), "*", BATCH_SIZE, '\n')
+            print("K-fold:", len(tr_loader), "*", BATCH_SIZE, "->", len(ts_loader), "*", BATCH_SIZE, '\n')
             model = Resnet50(len(tr_loader))
             model.to(DEVICE)
             if os.path.exists("./modelCache.pt"):
