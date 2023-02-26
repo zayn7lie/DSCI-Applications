@@ -36,7 +36,10 @@ class RMMD(Resnet50):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-
+        x_ = nn.Sequential(
+            nn.Linear(2048, 256),
+            nn.ReLU(inplace=True)
+        )(y)
         # ResNet-50 with MMD
         mmd_loss = 0
         if self.training:
@@ -48,7 +51,11 @@ class RMMD(Resnet50):
             y = self.layer1(y)
             y = self.layer2(y)
             y = self.layer3(y)
-            mmd_loss += torch.mean(torch.matmul(x - y, torch.transpose(x - y, 0, 1)))
+            y_ = nn.Sequential(
+                nn.Linear(2048, 256),
+                nn.ReLU(inplace=True)
+            )(y)
+            mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1)))
         
         x = self.layer4(x)
 
