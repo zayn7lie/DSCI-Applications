@@ -28,7 +28,7 @@ class RMMD(Resnet50):
     def __init__(self):
         super().__init__()
         self.bottleneck = nn.Sequential(
-            nn.AdaptiveAvgPool3d((1, 1, 1)),
+            nn.AdaptiveAvgPool2d((1, 1)),
             nn.ReLU(inplace=False)
         )
 
