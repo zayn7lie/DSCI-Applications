@@ -34,7 +34,7 @@ def train(epoch, model, device, train_loader, optimizer):
         optimizer.step()
         
         if (batch_idx + 1) % 9 == 0:
-            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(train_loader), sumloss / 3, maxloss, minloss))
+            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(train_loader), sumloss / 9, maxloss, minloss))
             sumloss = 0
             minloss = 1
             maxloss = 0
