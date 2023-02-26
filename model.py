@@ -27,9 +27,17 @@ class Resnet50(models.ResNet):
 class RMMD(Resnet50):
     def __init__(self):
         super().__init__()
-        self.bottleneck = nn.Sequential(
-            nn.Linear(716800, 256),
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(1024 * 14 * 14, 4096),
+            nn.ReLU(inplace=False),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
             nn.ReLU(inplace=False)
+        )
+        self.bottleneck = nn.Sequential(
+            nn.Linear(4096, 256),
+            nn.ReLU(inplace=True)
         )
     def forward(self, x, y):
         x = self.conv1(x)
@@ -42,7 +50,8 @@ class RMMD(Resnet50):
         x = self.layer3(x)
         
         # ResNet-50 with MMD
-        x_ = self.bottleneck(x)
+        x_ = self.classifier(x)
+        x_ = self.bottleneck(x_)
         mmd_loss = 0
         if self.training:
             y = self.conv1(y)
@@ -53,7 +62,8 @@ class RMMD(Resnet50):
             y = self.layer1(y)
             y = self.layer2(y)
             y = self.layer3(y)
-            y_ = self.bottleneck(y)
+            y_ = self.classifier(y)
+            y_ = self.bottleneck(y_)
             print(y_)
             print(x_)
             print(x_ - y_)
