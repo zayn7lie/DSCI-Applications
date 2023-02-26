@@ -28,8 +28,8 @@ class RMMD(Resnet50):
     def __init__(self):
         super().__init__()
         self.bottleneck = nn.Sequential(
-            nn.Linear(14, 1),
-            nn.Linear(14, 1),
+            nn.AdaptiveAvgPool2d((1, 1))
+            nn.Linear(256 * 6 * 6, 4096),
             nn.ReLU(inplace=False)
         )
 
@@ -44,7 +44,6 @@ class RMMD(Resnet50):
         x = self.layer3(x)
         
         # ResNet-50 with MMD
-        print(x)
         x_ = self.bottleneck(x)
         mmd_loss = 0
         if self.training:
