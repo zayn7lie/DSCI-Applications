@@ -62,7 +62,7 @@ def eval(model, device, test_loader):
             cnt += 1
             imgs, targets = imgs.to(device), targets.to(device)
 
-            output = model(imgs)
+            output = model(imgs, None)
             loss = criterion(output, targets.type(torch.float))
             
             print_loss = loss.data.item()
