@@ -11,7 +11,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
     criterion = nn.BCELoss()
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
-    cnt = 1
+    cnt = 0
     sumloss, minloss, maxloss = 0, 1, 0
     iter_y = iter(tr_loader_y)
     
