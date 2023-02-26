@@ -28,7 +28,7 @@ class RMMD(Resnet50):
     def __init__(self):
         super().__init__()
         self.bottleneck = nn.Sequential(
-            nn.Linear(4096, 256),
+            nn.Linear(14, 256),
             nn.ReLU(inplace=True)
         )
     def forward(self, x, y):
@@ -56,7 +56,7 @@ class RMMD(Resnet50):
             y_ = self.bottleneck(y)
             print(y_)
             print(x_)
-            print(x_ - y_)
+            print(x_-y_)
             mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1)))
         
         x = self.layer4(x)
