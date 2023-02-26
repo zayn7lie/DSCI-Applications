@@ -70,12 +70,10 @@ def eval(model, device, test_loader):
             for i in range(len(output)):
                 if output[i] >= 0.5: output[i] = 1
                 else: output[i] = 0
-            kappa += cohen_kappa_score(targets, output)
             f1 += f1_score(targets, output)
             auc += roc_auc_score(targets, output)
             print(kappa, f1, auc)
         avgloss = test_loss / cnt
-        avgkappa = kappa * 100 / cnt
         avgf1 = f1 * 100 / cnt
         avgauc = auc * 100 / cnt
-        print('\nVal set: Average loss: {:.4f} Average kappa: {:.4f}% Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgkappa, avgf1, avgauc))
+        print('\nVal set: Average loss: {:.4f} Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgf1, avgauc))
