@@ -13,7 +13,7 @@ import numpy as np
 def main():
     # para setting
     modellr = 1e-4
-    BATCH_SIZE = 100
+    BATCH_SIZE = 50
     NUM_WORKERS = 8
     EPOCHS = 50 #50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device() # 
