@@ -34,7 +34,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
         minloss, maxloss = min(minloss, loss), max(maxloss, loss)
         
         sum_loss += loss.item()
-        sum_mmd += mmd_loss.item()
+        sum_mmd += mmd_loss
         sum_bce += bce_loss.item()
 
         loss.backward()
