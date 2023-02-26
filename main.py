@@ -45,7 +45,7 @@ def main():
             model = Resnet50(len(tr_loader))
             model.to(DEVICE)
             if os.path.exists("./modelCache.pt"):
-                model = model.load_state_dict(torch.load("./modelCache.pt"))
+                model.load_state_dict(torch.load("./modelCache.pt"))
             else: 
                 optimizer = optim.Adam(model.parameters(), lr=modellr)
                 for epoch in range(1, EPOCHS + 1):
