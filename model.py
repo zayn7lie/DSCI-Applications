@@ -48,8 +48,7 @@ class RMMD(Resnet50):
             y = self.layer1(y)
             y = self.layer2(y)
             y = self.layer3(y)
-            delta = x - y
-            mmd_loss += torch.mean(torch.mm(delta, torch.transpose(delta, 0, 1)))
+            mmd_loss += torch.mean(torch.matmul(x - y, torch.transpose(x - y, 0, 1)))
         
         x = self.layer4(x)
 
