@@ -44,6 +44,7 @@ class RMMD(Resnet50):
         x = self.layer3(x)
         
         # ResNet-50 with MMD
+        print(x)
         x_ = self.bottleneck(x)
         mmd_loss = 0
         if self.training:
