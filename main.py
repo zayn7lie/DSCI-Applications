@@ -13,15 +13,16 @@ import numpy as np
 def main():
     # para setting
     modellr = 1e-4
-    BATCH_SIZE = 50
+    BATCH_SIZE = 100
+    NUM_WORKERS = 4
     EPOCHS = 50 #50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device() # 
 
     # load data
     fr_dataset = odirData("./OIA-ODIR/Off-site Test Set")
     to_dataset = odirData("./OIA-ODIR/On-site Test Set")
-    fr_loader = DataLoader(fr_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
-    to_loader = DataLoader(to_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
+    fr_loader = DataLoader(fr_dataset, BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
+    to_loader = DataLoader(to_dataset, BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
     print("Origin:", len(fr_dataset), "=", len(fr_loader), "*", BATCH_SIZE, "->", len(to_dataset), "=", len(to_loader), "*", BATCH_SIZE, '\n')
 
     kfold = KFold(n_splits=10, shuffle=True)
@@ -31,10 +32,10 @@ def main():
             # split data
             fr_tr_idxs, fr_ts_idxs = SRS(fr_idx_9), SRS(fr_idx_1)
             to_tr_idxs, to_ts_idxs = SRS(to_idx_9), SRS(to_idx_1)
-            tr_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=2, sampler=fr_tr_idxs)
-            tr_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=2, sampler=to_tr_idxs)
-            ts_loader_y = DataLoader(fr_dataset, BATCH_SIZE, num_workers=2, sampler=fr_tr_idxs)
-            ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=2, sampler=to_ts_idxs)
+            tr_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_tr_idxs)
+            tr_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_tr_idxs)
+            ts_loader_y = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_tr_idxs)
+            ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_ts_idxs)
             # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
             print("K-fold:", len(tr_loader_x), "*", BATCH_SIZE, "+", len(tr_loader_y), "*", BATCH_SIZE,  "->", len(ts_loader_y), "*", BATCH_SIZE, '\n')
             
