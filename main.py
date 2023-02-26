@@ -42,8 +42,8 @@ def main():
             # load model
             model = RMMD()
             model.to(DEVICE)
-            if os.path.exists("./modelCache.pt"):
-                model.load_state_dict(torch.load("./modelCache.pt"))
+            # if os.path.exists("./modelCache.pt"):
+                # model.load_state_dict(torch.load("./modelCache.pt"))
 
             # train model
             optimizer = optim.Adam(model.parameters(), lr=modellr)
