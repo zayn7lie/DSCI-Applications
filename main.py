@@ -14,12 +14,12 @@ def main():
     # para setting
     modellr = 1e-4
     BATCH_SIZE = 50
-    EPOCHS = 50 #50
+    EPOCHS = 0 #50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device() # 
 
     # load data
-    fr_dataset = odirData("./OIA-ODIR/On-site Test Set")
-    to_dataset = odirData("./OIA-ODIR/Off-site Test Set")
+    fr_dataset = odirData("./OIA-ODIR/Off-site Test Set")
+    to_dataset = odirData("./OIA-ODIR/On-site Test Set")
     fr_loader = DataLoader(fr_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
     to_loader = DataLoader(to_dataset, BATCH_SIZE, shuffle=True, num_workers=2)
     print("Origin:", len(fr_dataset), "=", len(fr_loader), "*", BATCH_SIZE, "->", len(to_dataset), "=", len(to_loader), "*", BATCH_SIZE, '\n')
