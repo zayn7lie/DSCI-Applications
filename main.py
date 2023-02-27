@@ -47,7 +47,7 @@ def main():
             # train model
             optimizer = optim.Adam(model.parameters(), lr=modellr)
             for epoch in range(1, EPOCHS + 1):
-                adjust_lr(optimizer, epoch, modellr)
+                # adjust_lr(optimizer, epoch, modellr)
                 train(epoch, model, DEVICE, tr_loader_x, tr_loader_y, optimizer)
             torch.save(model.state_dict(), "./modelCache.pt")
             
