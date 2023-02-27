@@ -1,11 +1,10 @@
 from dataset import odirData
+from model import RMMD
 from train_eval import train, eval, adjust_lr
-from model import Resnet50, RMMD
 
 import torch
 from torch.utils.data import DataLoader, SubsetRandomSampler as SRS
 from torch import optim
-import os
 from sklearn.model_selection import KFold # k-fold
 import numpy as np
 # import torch_xla.core.xla_model as xm #tputraining

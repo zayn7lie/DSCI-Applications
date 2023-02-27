@@ -2,31 +2,10 @@ import torch
 from torch import nn
 from torchvision import models
 
-class Resnet50(models.ResNet):
+class RMMD(models.ResNet):
     def __init__(self):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
         self.sigm = nn.Sigmoid()
-
-    def forward(self, x, y):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)        
-        x = self.layer4(x)
-
-        x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
-        x = self.fc(x)
-
-        return self.sigm(x), 0
-
-class RMMD(Resnet50):
-    def __init__(self):
-        super().__init__()
         self.bottleneck = nn.Sequential(
             nn.Conv2d(1024, 256, kernel_size=14),
             nn.ReLU(inplace=False)
