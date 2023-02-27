@@ -28,7 +28,7 @@ def main():
     fr_idx = iter(enumerate(kfold.split(np.arange(len(fr_dataset)))))
     to_idx = iter(enumerate(kfold.split(np.arange(len(to_dataset)))))
     for i in range(K):
-        print("{:.0f}th FOLD:")
+        print("{:.0f}th FOLD:".format(i + 1))
         fold_1, (fr_idx_tr, fr_idx_ts) = fr_idx.__next__()
         fold_2, (to_idx_tr, to_idx_ts) = to_idx.__next__()
 
