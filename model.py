@@ -7,7 +7,8 @@ class RMMD(models.ResNet):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
         self.sigm = nn.Sigmoid()
         self.bottleneck = nn.Sequential(
-            nn.Conv2d(1024, 256, kernel_size=14),
+            nn.Conv2d(1024, 4096, kernel_size=14),
+            nn.Linear(4096, 256),
             nn.ReLU(inplace=False)
         )
 
