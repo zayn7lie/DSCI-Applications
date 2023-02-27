@@ -7,9 +7,8 @@ class RMMD(models.ResNet):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
         self.sigm = nn.Sigmoid()
         self.bottleneck = nn.Sequential(
-            nn.Conv2d(1024, 4096, kernel_size=14),
             nn.Linear(4096, 256),
-            nn.ReLU(inplace=False)
+            nn.ReLU(inplace=True)
         )
 
     def forward(self, x, y):
@@ -23,7 +22,9 @@ class RMMD(models.ResNet):
         x = self.layer3(x)
         
         # ResNet-50 with MMD
-        x_ = self.bottleneck(x).view(x.size(0), -1)
+        x_ = nn.Conv2d(1024, 4096, kernel_size=14)(x)
+        x_ = x_.view(x_.size(0), -1)
+        x_ = self.bottleneck(x_)
         mmd_loss = 0
         if self.training:
             y = self.conv1(y)
@@ -34,7 +35,9 @@ class RMMD(models.ResNet):
             y = self.layer1(y)
             y = self.layer2(y)
             y = self.layer3(y)
-            y_ = self.bottleneck(y).view(y.size(0), -1)
+            y_ = nn.Conv2d(1024, 4096, kernel_size=14)(y)
+            y_ = y_.view(y_.size(0), -1)
+            y_ = self.bottleneck(y_)
             # print(x_.size(), y_.size())
             mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1)))
         
