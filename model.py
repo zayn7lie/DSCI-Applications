@@ -28,7 +28,7 @@ class RMMD(Resnet50):
     def __init__(self):
         super().__init__()
         self.bottleneck = nn.Sequential(
-            nn.Conv2d(14, 1, kernel_size=14),
+            nn.Conv2d(1024, 256, kernel_size=14),
             nn.ReLU(inplace=False)
         )
 
