@@ -7,7 +7,7 @@ def adjust_lr(optimizer, epoch, modellr):
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
-def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
+def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
     criterion = nn.BCELoss()
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
@@ -28,7 +28,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
 
         output, mmd_loss = model(imgs_x, imgs_y)
         bce_loss = criterion(output, targets.type(torch.float))
-        loss = bce_loss + 0 * mmd_loss
+        loss = bce_loss + ld * mmd_loss
         
         sumloss += loss.item()
         minloss, maxloss = min(minloss, loss), max(maxloss, loss)
