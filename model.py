@@ -35,7 +35,7 @@ class RMMD(models.ResNet):
             y = self.layer3(y)
             y_ = self.bottleneck(y).view(y.size(0), -1)
             # print(x_.size(), y_.size())
-            mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1))).item()
+            mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1)))
         
         x = self.layer4(x)
 

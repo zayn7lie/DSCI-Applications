@@ -12,7 +12,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
     cnt = 0
-    sumloss, minloss, maxloss = 0, 1, 0
+    sumloss, minloss, maxloss = 0, 100, 0
     iter_y = iter(tr_loader_y)
     
     for batch_idx, (imgs_x, targets) in enumerate(tr_loader_x):
@@ -28,13 +28,13 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
 
         output, mmd_loss = model(imgs_x, imgs_y)
         bce_loss = criterion(output, targets.type(torch.float))
-        loss = bce_loss + 1 * mmd_loss
+        loss = bce_loss + 0 * mmd_loss
         
         sumloss += loss.item()
         minloss, maxloss = min(minloss, loss), max(maxloss, loss)
         
         sum_loss += loss.item()
-        sum_mmd += mmd_loss
+        sum_mmd += mmd_loss.item()
         sum_bce += bce_loss.item()
 
         loss.backward()
@@ -42,7 +42,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer):
         
         if (batch_idx + 1) % 9 == 0:
             print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 9, maxloss, minloss))
-            sumloss, minloss, maxloss = 0, 1, 0
+            sumloss, minloss, maxloss = 0, 100, 0
 
     avg_loss, avg_mmd, avg_bce = sum_loss / len(tr_loader_x), sum_mmd / len(tr_loader_x), sum_bce / len(tr_loader_x)
     print("Epoch:", epoch, "Loss:", avg_loss, "MMD:", avg_mmd, "BCE:", avg_bce, '\n')
