@@ -34,7 +34,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
         minloss, maxloss = min(minloss, loss), max(maxloss, loss)
         
         sum_loss += loss.item()
-        sum_mmd += mmd_loss.item() * 1e10
+        sum_mmd += mmd_loss.item()
         sum_bce += bce_loss.item()
 
         loss.backward()
@@ -44,8 +44,8 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
             print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 9, maxloss, minloss))
             sumloss, minloss, maxloss = 0, 100, 0
 
-    avg_loss, avg_mmd, avg_bce = sum_loss * 100 / len(tr_loader_x), sum_mmd / len(tr_loader_x), sum_bce * 100 / len(tr_loader_x)
-    print("Epoch: {:0f} Loss: {:.11f}% MMD: {:.11f} * 1e-10 BCE: {:.11f}%\n".format(epoch, avg_loss, avg_mmd, avg_bce))
+    avg_loss, avg_mmd, avg_bce = sum_loss * 100 / len(tr_loader_x), sum_mmd * 100 / len(tr_loader_x), sum_bce * 100 / len(tr_loader_x)
+    print("Epoch: {:.0f} Loss: {:.11f}% MMD: {:.11f}% BCE: {:.11f}%\n".format(epoch, avg_loss, avg_mmd, avg_bce))
 
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
