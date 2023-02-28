@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 def adjust_lr(optimizer, epoch, modellr):
-    modellrnew = modellr * (0.1 ** (epoch // 41)) # 25
+    modellrnew = modellr * (0.1 ** (epoch // 30)) # 25
     print("Epoch:", epoch, "Learning Rate:", modellrnew)
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
@@ -59,7 +59,6 @@ def eval(model, device, test_loader):
     # print(total_num, len(test_loader))
     with torch.no_grad():
         for imgs, targets in test_loader:
-            cnt += 1
             imgs, targets = imgs.to(device), targets.to(device)
 
             output, _ = model(imgs, None)
@@ -77,7 +76,6 @@ def eval(model, device, test_loader):
             
             f1 += f1_score(targets, output)
             auc += roc_auc_score(targets, output)
-            print(f1, auc)
 
         avgloss = test_loss / cnt
         avgf1 = f1 * 100 / cnt
