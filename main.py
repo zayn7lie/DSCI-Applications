@@ -14,10 +14,10 @@ def main():
     modellr = 1e-4
     BATCH_SIZE = 10 
     NUM_WORKERS = 1 
-    EPOCHS = 50 #50
+    EPOCHS = 100
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 10 # k-fold
-    ld = 0.0075 #lambda
+    ld = 0.0000 #lambda
 
     # load data
     fr_dataset = odirData("./OIA-ODIR/Off-site Test Set")

@@ -40,8 +40,8 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
         loss.backward()
         optimizer.step()
         
-        if (batch_idx + 1) % 9 == 0:
-            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 9, maxloss, minloss))
+        if (batch_idx + 1) % 45 == 0:
+            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 45, maxloss, minloss))
             sumloss, minloss, maxloss = 0, 100, 0
 
     avg_loss, avg_mmd, avg_bce = sum_loss * 100 / len(tr_loader_x), sum_mmd * 100 / len(tr_loader_x), sum_bce * 100 / len(tr_loader_x)
@@ -54,7 +54,7 @@ def eval(model, device, test_loader):
     criterion = nn.BCELoss()
     model.eval()
     test_loss, cnt = 0, 0
-    kappa, f1, auc = 0, 0, 0
+    f1, auc = 0, 0
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
     with torch.no_grad():
@@ -65,17 +65,20 @@ def eval(model, device, test_loader):
             output, _ = model(imgs, None)
             loss = criterion(output, targets.type(torch.float))
             
-            print_loss = loss.data.item()
+            print_loss = loss.item()
             test_loss += print_loss
 
             output = output.cpu().numpy().flat
             targets = targets.cpu().numpy().flat
+
             for i in range(len(output)):
                 if output[i] >= 0.5: output[i] = 1
                 else: output[i] = 0
+            
             f1 += f1_score(targets, output)
             auc += roc_auc_score(targets, output)
-            print(kappa, f1, auc)
+            print(f1, auc)
+
         avgloss = test_loss / cnt
         avgf1 = f1 * 100 / cnt
         avgauc = auc * 100 / cnt
