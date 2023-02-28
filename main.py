@@ -55,7 +55,7 @@ def main():
             for epoch in range(EPOCHS):
                 adjust_lr(optimizer, epoch, modellr)
                 train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, ld)
-            torch.save(model.state_dict(), "./modelCache.pt")
+            torch.save(model.state_dict(), "./modelCache_" + (ld * 10000) + ".pt")
             
             # evaluate model
             eval(model, DEVICE, ts_loader_y)
