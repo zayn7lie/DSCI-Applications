@@ -40,8 +40,8 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for i in range(6):
-            ld = i * 0.0025
+        for i in [0, 0.0025, 0.0050, 0.0075, 0.0100, 0.0250]:
+            ld = i
             # load model
             print("\nlambda = {:.4f}".format(ld))
             model = RMMD()
