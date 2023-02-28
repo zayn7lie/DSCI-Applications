@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader, SubsetRandomSampler as SRS
 from torch import optim
 from sklearn.model_selection import KFold # k-fold
 import numpy as np
+import os
 # import torch_xla.core.xla_model as xm #tputraining
 
 def main():
@@ -14,7 +15,7 @@ def main():
     modellr = 1e-4
     BATCH_SIZE = 10 
     NUM_WORKERS = 1 
-    EPOCHS = 75
+    EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 10 # k-fold
     ld = 0.0000 #lambda
@@ -46,8 +47,8 @@ def main():
             print("\nLAMBDA = {:.4f}\n".format(ld))
             model = RMMD()
             model.to(DEVICE)
-            # if os.path.exists("./modelCache.pt"):
-                # model.load_state_dict(torch.load("./modelCache.pt"))
+            if os.path.exists("./modelCache.pt"):
+                model.load_state_dict(torch.load("./modelCache.pt"))
 
             # train model
             optimizer = optim.Adam(model.parameters(), lr=modellr)
