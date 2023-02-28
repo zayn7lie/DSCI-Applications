@@ -17,7 +17,7 @@ def main():
     EPOCHS = 50 #50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 10 # k-fold
-    ld = 0.01 #lambda
+    ld = 0.0025 #lambda
 
     # load data
     fr_dataset = odirData("./OIA-ODIR/Off-site Test Set")
