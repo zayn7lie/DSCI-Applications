@@ -73,6 +73,7 @@ def eval(model, device, test_loader):
 
             output = np.array(output >= 0.5, dtype=float)
             # print(output)
+            
             cnt += 1
             f1 += f1_score(targets, output)
             auc += roc_auc_score(targets, output)
