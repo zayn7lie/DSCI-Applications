@@ -64,7 +64,7 @@ def eval(model, device, test_loader):
 
             output, _ = model(imgs, None)
             loss = criterion(output, targets.type(torch.float))
-            print(output.cpu().numpy())
+            
             print_loss = loss.item()
             test_loss += print_loss
 
@@ -72,7 +72,7 @@ def eval(model, device, test_loader):
             targets = targets.cpu().numpy().flat
 
             output = np.array(output >= 0.5, dtype=float)
-            print(output)
+            # print(output)
             cnt += 1
             f1 += f1_score(targets, output)
             auc += roc_auc_score(targets, output)
