@@ -38,10 +38,10 @@ class RMMD(models.ResNet):
             y = self.layer2(y)
             y = self.layer3(y)
 
-            x_ = x.view(x.size(0), -1)
+            x_ = x.view(x.size(0), 1024 * 14 * 14)
             x_ = self.mmd_transform(x_)
             
-            y_ = y.view(y.size(0), -1)
+            y_ = y.view(y.size(0), 1024 * 14 * 14)
             y_ = self.mmd_transform(y)
 
             mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1)))
