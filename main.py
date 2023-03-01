@@ -58,7 +58,7 @@ def main():
             # torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 10000))
             
             # evaluate model
-            eval(model, DEVICE, tr_loader_y)
+            eval(model, DEVICE, ts_loader_y)
 
         break
 
