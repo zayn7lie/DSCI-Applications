@@ -15,6 +15,7 @@ class RMMD(models.ResNet):
             nn.Linear(4096, 256),
             nn.ReLU(inplace=True)
         )
+        self.sigm = nn.Sigmoid()
 
     def forward(self, x, y):
         x = self.conv1(x)
@@ -52,4 +53,4 @@ class RMMD(models.ResNet):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
 
-        return x, mmd_loss
+        return self.sigm(x), mmd_loss
