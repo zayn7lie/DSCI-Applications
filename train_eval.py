@@ -63,7 +63,7 @@ def eval(model, device, test_loader):
 
             output, _ = model(imgs, None)
             loss = criterion(output, targets.type(torch.float))
-            print(output.item())
+            print(output.cpu().numpy())
             print_loss = loss.item()
             test_loss += print_loss
 
