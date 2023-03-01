@@ -49,6 +49,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
 
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
+import numpy as np
 
 def eval(model, device, test_loader):
     criterion = nn.BCELoss()
@@ -70,10 +71,8 @@ def eval(model, device, test_loader):
             output = output.cpu().numpy().flat
             targets = targets.cpu().numpy().flat
 
-            for i in range(len(output)):
-                if output[i] >= 0.5: output[i] = 1
-                else: output[i] = 0
-            
+            output = np.array(output >= 0.5, dtype=float)
+            print(output)
             cnt += 1
             f1 += f1_score(targets, output)
             auc += roc_auc_score(targets, output)
