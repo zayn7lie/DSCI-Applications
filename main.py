@@ -15,7 +15,7 @@ def main():
     modellr = 1e-4
     BATCH_SIZE = 10 
     NUM_WORKERS = 1 
-    EPOCHS = 75
+    EPOCHS = 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 10 # k-fold
     ld = 0.0000 #lambda
@@ -55,7 +55,7 @@ def main():
             for epoch in range(EPOCHS):
                 adjust_lr(optimizer, epoch, modellr)
                 train(epoch + 1, model, DEVICE, ts_loader_x, ts_loader_y, optimizer, ld)
-            # torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 10000))
+            torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 10000))
             
             # evaluate model
             eval(model, DEVICE, ts_loader_y)

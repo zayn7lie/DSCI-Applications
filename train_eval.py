@@ -63,7 +63,7 @@ def eval(model, device, test_loader):
 
             output, _ = model(imgs, None)
             loss = criterion(output, targets.type(torch.float))
-            
+            print(output.item())
             print_loss = loss.item()
             test_loss += print_loss
 
@@ -73,7 +73,6 @@ def eval(model, device, test_loader):
             for i in range(len(output)):
                 if output[i] >= 0.5: output[i] = 1
                 else: output[i] = 0
-            print(output)
             
             cnt += 1
             f1 += f1_score(targets, output)
