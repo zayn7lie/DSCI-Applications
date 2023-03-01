@@ -6,12 +6,9 @@ class RMMD(models.ResNet):
     def __init__(self):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
         self.mmd_transform = nn.Sequential(
-            nn.Dropout(),
             nn.Linear(1024 * 14 * 14, 4096),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(4096, 4096),
-            nn.ReLU(inplace=True),
             nn.Linear(4096, 256),
             nn.ReLU(inplace=True)
         )
