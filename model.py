@@ -5,11 +5,15 @@ from torchvision import models
 class RMMD(models.ResNet):
     def __init__(self):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
-        self.sigm = nn.Sigmoid()
-        self.bottleneck = nn.Sequential(
-            nn.Conv2d(1024, 1024, kernel_size=14),
-            # nn.Linear(1024, 256),
-            nn.ReLU(inplace=False)
+        self.mmd_transform = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(1024 * 14 * 14, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Linear(4096, 256),
+            nn.ReLU(inplace=True)
         )
 
     def forward(self, x, y):
@@ -34,14 +38,11 @@ class RMMD(models.ResNet):
             y = self.layer2(y)
             y = self.layer3(y)
 
-            x_ = self.bottleneck(x)
-            x_ = x_.view(x_.size(0), -1)
-            # x_ = self.bottleneck_2(x_)
-
-            y_ = self.bottleneck(y)
-            y_ = y_.view(y_.size(0), -1)
-            # y_ = self.bottleneck_2(y_)
-            # print(x_.size(), y_.size())
+            x_ = x.view(x.size(0), -1)
+            x_ = self.mmd_transform(x_)
+            
+            y_ = y.view(y.size(0), -1)
+            y_ = self.mmd_transform(y)
 
             mmd_loss += torch.mean(torch.mm(x_ - y_, torch.transpose(x_ - y_, 0, 1)))
         
@@ -51,4 +52,4 @@ class RMMD(models.ResNet):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
 
-        return self.sigm(x), mmd_loss
+        return x, mmd_loss

@@ -41,7 +41,7 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for i in [0.0000]:
+        for i in [0.0000, 0.0250, 0.0500, 0.0750, 0.1000]:
             ld = i
             # load model
             print("\nLAMBDA = {:.4f}\n".format(ld))
@@ -61,8 +61,6 @@ def main():
             eval(model, DEVICE, ts_loader_y)
 
         break
-
-
     return 0
 
     
