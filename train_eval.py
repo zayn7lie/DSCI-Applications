@@ -9,7 +9,7 @@ def adjust_lr(optimizer, epoch, modellr):
         param_group['lr'] = modellrnew
 
 def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
-    criterion = WeightedFocalLoss()
+    criterion = nn.BCELoss() #WeightedFocalLoss()
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
     cnt = 0
