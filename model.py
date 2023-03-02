@@ -115,7 +115,6 @@ class RMMD(models.ResNet):
             stop_value=drop_prob,
             nr_steps=5e3
         )
-        self.sigm = nn.Sigmoid()
 
     def forward(self, x, y):
         x = self.conv1(x)
@@ -157,4 +156,4 @@ class RMMD(models.ResNet):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
 
-        return self.sigm(x), mmd_loss
+        return x, mmd_loss
