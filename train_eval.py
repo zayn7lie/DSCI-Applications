@@ -58,8 +58,8 @@ def eval(model, device, test_loader):
     test_loss, cnt = 0, 0
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
-    reshape_t = [][]
-    reshape_o = [][]
+    reshape_t = []
+    reshape_o = []
     with torch.no_grad():
         for imgs, targets in test_loader:
             imgs, targets = imgs.to(device), targets.to(device)
