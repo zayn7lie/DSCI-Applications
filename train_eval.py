@@ -76,8 +76,8 @@ def eval(model, device, test_loader):
             output = np.array(output >= 0.5, dtype=float)
             # print(output)
             
-            reshape_t.append(targets[i])
-            reshape_o.append(output[i])
+            reshape_t.append(targets)
+            reshape_o.append(output)
 
             cnt += 1
         reshape_t = np.transpose(reshape_t)
