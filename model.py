@@ -1,13 +1,119 @@
 import torch
 from torch import nn
 from torchvision import models
+import numpy as np
+
+class LinearScheduler(nn.Module):
+    def __init__(self, dropblock, start_value, stop_value, nr_steps):
+        super(LinearScheduler, self).__init__()
+        self.dropblock = dropblock
+        self.i = 0
+        self.drop_values = np.linspace(start=start_value, stop=stop_value, num=int(nr_steps))
+
+    def forward(self, x):
+        return self.dropblock(x)
+
+    def step(self):
+        if self.i < len(self.drop_values):
+            self.dropblock.drop_prob = self.drop_values[self.i]
+
+        self.i += 1
+
+class DropBlock2D(nn.Module):
+    r"""Randomly zeroes 2D spatial blocks of the input tensor.
+    As described in the paper
+    `DropBlock: A regularization method for convolutional networks`_ ,
+    dropping whole blocks of feature map allows to remove semantic
+    information as compared to regular dropout.
+    Args:
+        drop_prob (float): probability of an element to be dropped.
+        block_size (int): size of the block to drop
+    Shape:
+        - Input: `(N, C, H, W)`
+        - Output: `(N, C, H, W)`
+    .. _DropBlock: A regularization method for convolutional networks:
+       https://arxiv.org/abs/1810.12890
+    """
+
+    def __init__(self, drop_prob, block_size):
+        super(DropBlock2D, self).__init__()
+
+        self.drop_prob = drop_prob
+        self.block_size = block_size
+
+    def forward(self, x):
+        # shape: (bsize, channels, height, width)
+
+        assert x.dim() == 4, \
+            "Expected input with 4 dimensions (bsize, channels, height, width)"
+
+        if not self.training or self.drop_prob == 0.:
+            return x
+        else:
+            # get gamma value
+            gamma = self._compute_gamma(x)
+
+            # sample mask
+            mask = (torch.rand(x.shape[0], *x.shape[2:]) < gamma).float()
+
+            # place mask on input device
+            mask = mask.to(x.device)
+
+            # compute block mask
+            block_mask = self._compute_block_mask(mask)
+
+            # apply block mask
+            out = x * block_mask[:, None, :, :]
+
+            # scale output
+            out = out * block_mask.numel() / block_mask.sum()
+
+            return out
+
+    def _compute_block_mask(self, mask):
+        block_mask = nn.functional.max_pool2d(input=mask[:, None, :, :],
+                                  kernel_size=(self.block_size, self.block_size),
+                                  stride=(1, 1),
+                                  padding=self.block_size // 2)
+
+        if self.block_size % 2 == 0:
+            block_mask = block_mask[:, :, :-1, :-1]
+
+        block_mask = 1 - block_mask.squeeze(1)
+
+        return block_mask
+
+    def _compute_gamma(self, x):
+        return self.drop_prob / (self.block_size ** 2)
+
+class WeightedFocalLoss(nn.Module):
+    "Non weighted version of Focal Loss"    
+    def __init__(self, alpha=.25, gamma=2):
+            super(WeightedFocalLoss, self).__init__()        
+            self.alpha = torch.tensor([alpha, 1-alpha]).cuda()        
+            self.gamma = gamma
+            
+    def forward(self, inputs, targets):
+            BCE_loss = nn.functional.binary_cross_entropy_with_logits(inputs, targets, reduction='none')        
+            targets = targets.type(torch.long)        
+            at = self.alpha.gather(0, targets.data.view(-1))        
+            pt = torch.exp(-BCE_loss)        
+            F_loss = at*(1-pt)**self.gamma * BCE_loss        
+            return F_loss.mean()
 
 class RMMD(models.ResNet):
-    def __init__(self):
+    def __init__(self, drop_prob=0.1, block_size=7):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
         self.mmd_transform = nn.Sequential(
             nn.Linear(1024 * 14 * 14, 256),
             nn.ReLU(inplace=True)
+        )
+        
+        self.dropblock = LinearScheduler(
+            DropBlock2D(drop_prob=drop_prob, block_size=block_size),
+            start_value=0.,
+            stop_value=drop_prob,
+            nr_steps=5e3
         )
         self.sigm = nn.Sigmoid()
 
@@ -18,7 +124,9 @@ class RMMD(models.ResNet):
         x = self.maxpool(x)
 
         x = self.layer1(x)
+        x = self.dropblock(x)
         x = self.layer2(x)
+        x = self.dropblock(x)
         x = self.layer3(x)
         
         # ResNet-50 with MMD
@@ -30,7 +138,9 @@ class RMMD(models.ResNet):
             y = self.maxpool(y)
 
             y = self.layer1(y)
+            y = self.dropblock(y)
             y = self.layer2(y)
+            y = self.dropblock(y)
             y = self.layer3(y)
 
             x_ = x.view(x.size(0), -1)

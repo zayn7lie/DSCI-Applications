@@ -10,9 +10,15 @@ from PIL import Image
 class odirData(Dataset):
     def __init__(self, path):
         self.path = path
-        self.transform = transforms.Compose([
-            transforms.RandomResizedCrop(224), # short l -> 512
-            # transforms.CenterCrop(224), # crop
+        self.transform_o = transforms.Compose([
+            transforms.Resize(224),
+            transforms.CenterCrop(224), # crop
+            transforms.ToTensor(),
+            # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        ])
+        self.transform_f = transforms.Compose([
+            transforms.Resize(200),
+            transforms.CenterCrop(224), # crop
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
@@ -42,7 +48,7 @@ class odirData(Dataset):
 
         # img = plt.imread(img_name)
         img = Image.open(img_name)
-        img = self.transform(img)
+        img = self.transform_f(img)
         # print(label)
         return img, label
 
