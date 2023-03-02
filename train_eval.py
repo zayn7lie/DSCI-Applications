@@ -53,12 +53,13 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 
 def eval(model, device, test_loader):
-    criterion = nn.BCELoss()
+    criterion = FC()
     model.eval()
     test_loss, cnt = 0, 0
-    f1, auc = 0, 0
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
+    reshape_t = []
+    reshape_o = []
     with torch.no_grad():
         for imgs, targets in test_loader:
             imgs, targets = imgs.to(device), targets.to(device)
@@ -69,17 +70,23 @@ def eval(model, device, test_loader):
             print_loss = loss.item()
             test_loss += print_loss
 
-            output = output.cpu().numpy().flat
-            targets = targets.cpu().numpy().flat
+            output = np.transpose(output.cpu().numpy())
+            targets = np.transpose(targets.cpu().numpy())
 
             output = np.array(output >= 0.5, dtype=float)
             # print(output)
             
-            cnt += 1
-            f1 += f1_score(targets, output)
-            auc += roc_auc_score(targets, output)
+            for i in range(8):
+                reshape_t[i].append(targets[i])
+                reshape_o[i].append(output[i])
 
+            cnt += 1
         avgloss = test_loss / cnt
-        avgf1 = f1 * 100 / cnt
-        avgauc = auc * 100 / cnt
+        f1, auc = 0, 0
+        for i in range(8):
+            f1 += f1_score(targets[i], output[i])
+            auc += roc_auc_score(targets[i], output[i])
+
+        avgf1 = f1 * 100 / 8
+        avgauc = auc * 100 / 8
         print('\nVal set: BCE: {:.4f} Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgf1, avgauc))
