@@ -84,8 +84,8 @@ def eval(model, device, test_loader):
         avgloss = test_loss / cnt
         f1, auc = 0, 0
         for i in range(8):
-            f1 += f1_score(targets[i], output[i])
-            auc += roc_auc_score(targets[i], output[i])
+            f1 += f1_score(reshape_t[i], reshape_o[i])
+            auc += roc_auc_score(reshape_t[i], reshape_o[i])
 
         avgf1 = f1 * 100 / 8
         avgauc = auc * 100 / 8
