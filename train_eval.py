@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from model import WeightedFocalLoss
+from model import FC
 
 def adjust_lr(optimizer, epoch, modellr):
     modellrnew = modellr * (0.1 ** (epoch // 25)) # 25
@@ -9,7 +9,7 @@ def adjust_lr(optimizer, epoch, modellr):
         param_group['lr'] = modellrnew
 
 def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
-    criterion = WeightedFocalLoss() #nn.BCELoss() #
+    criterion = FC() #nn.BCELoss() #
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
     cnt = 0

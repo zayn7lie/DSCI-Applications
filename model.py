@@ -86,20 +86,52 @@ class DropBlock2D(nn.Module):
     def _compute_gamma(self, x):
         return self.drop_prob / (self.block_size ** 2)
 
-class WeightedFocalLoss(nn.Module):
-    "Non weighted version of Focal Loss"    
-    def __init__(self, alpha=.25, gamma=2):
-            super(WeightedFocalLoss, self).__init__()        
-            self.alpha = torch.tensor([alpha, 1-alpha]).cuda()        
-            self.gamma = gamma
-            
-    def forward(self, inputs, targets):
-            BCE_loss = nn.functional.binary_cross_entropy_with_logits(inputs, targets, reduction='none')        
-            targets = targets.type(torch.long)        
-            at = self.alpha.gather(0, targets.data.view(-1))        
-            pt = torch.exp(-BCE_loss)        
-            F_loss = at*(1-pt)**self.gamma * BCE_loss        
-            return F_loss.mean()
+class FC(nn.Module):
+    def __init__(self, gamma_neg=2, gamma_pos=2, clip=0, eps=1e-8, disable_torch_grad_focal_loss=True):
+        super(AsymmetricLoss, self).__init__()
+
+        self.gamma_neg = gamma_neg
+        self.gamma_pos = gamma_pos
+        self.clip = clip
+        self.disable_torch_grad_focal_loss = disable_torch_grad_focal_loss
+        self.eps = eps
+
+    def forward(self, x, y):
+        """"
+        Parameters
+        ----------
+        x: input logits
+        y: targets (multi-label binarized vector)
+        """
+
+        # Calculating Probabilities
+        x_sigmoid = torch.sigmoid(x)
+        xs_pos = x_sigmoid
+        xs_neg = 1 - x_sigmoid
+
+        # Asymmetric Clipping
+        if self.clip is not None and self.clip > 0:
+            xs_neg = (xs_neg + self.clip).clamp(max=1)
+
+        # Basic CE calculation
+        los_pos = y * torch.log(xs_pos.clamp(min=self.eps))
+        los_neg = (1 - y) * torch.log(xs_neg.clamp(min=self.eps))
+        loss = los_pos + los_neg
+
+        # Asymmetric Focusing
+        if self.gamma_neg > 0 or self.gamma_pos > 0:
+            if self.disable_torch_grad_focal_loss:
+                torch.set_grad_enabled(False)
+            pt0 = xs_pos * y
+            pt1 = xs_neg * (1 - y)  # pt = p if t > 0 else 1-p
+            pt = pt0 + pt1
+            one_sided_gamma = self.gamma_pos * y + self.gamma_neg * (1 - y)
+            one_sided_w = torch.pow(1 - pt, one_sided_gamma)
+            if self.disable_torch_grad_focal_loss:
+                torch.set_grad_enabled(True)
+            loss *= one_sided_w
+
+        return -loss.sum()
 
 class RMMD(models.ResNet):
     def __init__(self, drop_prob=0.1, block_size=7):
