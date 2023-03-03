@@ -70,8 +70,8 @@ def eval(model, device, test_loader):
             print_loss = loss.item()
             test_loss += print_loss
 
-            output = np.transpose(output.cpu().numpy())
-            targets = np.transpose(targets.cpu().numpy())
+            output = output.cpu().numpy()
+            targets = targets.cpu().numpy()
 
             output = np.array(output >= 0.5, dtype=float)
             # print(output)
