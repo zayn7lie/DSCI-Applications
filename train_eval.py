@@ -86,7 +86,7 @@ def eval(model, device, test_loader):
         sum_o = np.transpose(sum_o)
         sum_t = np.transpose(sum_t)
 
-        print(sum_o)
+        print(sum_o.shape)
         avgloss = test_loss / cnt
         avgf1 = f1 * 100 / cnt
         avgauc = auc * 100 / cnt
