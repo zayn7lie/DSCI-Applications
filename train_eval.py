@@ -57,8 +57,8 @@ def eval(model, device, test_loader):
     model.eval()
     test_loss, cnt = 0, 0
     f1, auc = 0, 0
-    sum_o = []
-    sum_t = []
+    sum_o = [0., 0., 0., 0., 0., 0., 0., 0.]
+    sum_t = [0., 0., 0., 0., 0., 0., 0., 0.]
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
     with torch.no_grad():
