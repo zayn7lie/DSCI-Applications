@@ -57,8 +57,8 @@ def eval(model, device, test_loader):
     model.eval()
     test_loss, cnt = 0, 0
     f1, auc = 0, 0
-    sum_o = [0., 0., 0., 0., 0., 0., 0., 0.]
-    sum_t = [0., 0., 0., 0., 0., 0., 0., 0.]
+    sum_o = []
+    sum_t = []
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
     with torch.no_grad():
@@ -75,8 +75,10 @@ def eval(model, device, test_loader):
             output = np.array(output >= 0.5, dtype=float)
             targets = targets.cpu().detach().numpy()
             
-            np.insert(sum_o, 1, output, axis=0)
-            np.insert(sum_t, 1, targets, axis=0)
+            for i in output:
+                sum_o.append(i)
+            for i in targets:
+                sum_t.append(i)
             
             cnt += 1
             # f1 += f1_score(targets, output)
