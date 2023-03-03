@@ -55,8 +55,6 @@ import numpy as np
 def eval(model, device, test_loader):
     criterion = BCEFocalLosswithLogits()
     model.eval()
-    test_loss, cnt = 0, 0
-    f1, auc = 0, 0
     sum_o = []
     sum_t = []
     # total_num = len(test_loader.dataset)
@@ -66,10 +64,6 @@ def eval(model, device, test_loader):
             imgs, targets = imgs.to(device), targets.to(device)
 
             output, _ = model(imgs, None)
-            loss = criterion(output, targets.type(torch.float))
-            
-            print_loss = loss.item()
-            test_loss += print_loss
 
             output = output.cpu().detach().numpy()
             output = np.array(output >= 0.5, dtype=float)
@@ -80,14 +74,14 @@ def eval(model, device, test_loader):
             for i in targets:
                 sum_t.append(i)
             
-            cnt += 1
-            # f1 += f1_score(targets, output)
-            # auc += roc_auc_score(targets, output)
         sum_o = np.transpose(sum_o)
         sum_t = np.transpose(sum_t)
 
-        print(sum_o.shape)
-        avgloss = test_loss / cnt
-        avgf1 = f1 * 100 / cnt
-        avgauc = auc * 100 / cnt
-        print('\nVal set: BCE: {:.4f} Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgf1, avgauc))
+        f1, auc = 0, 0
+        for i in range(8):
+            f1 += f1_score(sum_t[i], sum_o[i])
+            auc += roc_auc_score(sum_t[i], sum_o[i])
+        avgf1 = f1 * 100 / 8
+        avgauc = auc * 100 / 8
+
+        print('\nF1: {:.4f}% Auc: {:.4f}%\n'.format(avgf1, avgauc))
