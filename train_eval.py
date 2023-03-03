@@ -56,10 +56,9 @@ def eval(model, device, test_loader):
     criterion = FC()
     model.eval()
     test_loss, cnt = 0, 0
+    f1, auc = 0, 0
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
-    reshape_t = []
-    reshape_o = []
     with torch.no_grad():
         for imgs, targets in test_loader:
             imgs, targets = imgs.to(device), targets.to(device)
@@ -70,26 +69,17 @@ def eval(model, device, test_loader):
             print_loss = loss.item()
             test_loss += print_loss
 
-            output = output.cpu().detach().numpy()
-            targets = targets.cpu().detach().numpy()
+            output = output.cpu().numpy().flat
+            targets = targets.cpu().numpy().flat
 
             output = np.array(output >= 0.5, dtype=float)
             # print(output)
-
-            reshape_t = np.append(reshape_t, targets, axis=0)
-            reshape_o = np.append(reshape_o, output, axis=0)
-            print(reshape_o)
-
+            
             cnt += 1
-        reshape_t = np.transpose(reshape_t)
-        reshape_o = np.transpose(reshape_t)
-        # print(reshape_t)
-        avgloss = test_loss / cnt
-        f1, auc = 0, 0
-        for i in range(8):
-            f1 += f1_score(reshape_t[i], reshape_o[i])
-            auc += roc_auc_score(reshape_t[i], reshape_o[i])
+            f1 += f1_score(targets, output)
+            auc += roc_auc_score(targets, output)
 
-        avgf1 = f1 * 100 / 8
-        avgauc = auc * 100 / 8
+        avgloss = test_loss / cnt
+        avgf1 = f1 * 100 / cnt
+        avgauc = auc * 100 / cnt
         print('\nVal set: BCE: {:.4f} Average f1: {:.4f}% Average auc: {:.4f}%\n'.format(avgloss, avgf1, avgauc))
