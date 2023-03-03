@@ -9,7 +9,7 @@ def adjust_lr(optimizer, epoch, modellr):
         param_group['lr'] = modellrnew
 
 def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
-    criterion = nn.BCELoss() #nn.BCELoss() #
+    criterion = FC() #nn.BCELoss() #
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
     cnt = 0
@@ -53,7 +53,7 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 
 def eval(model, device, test_loader):
-    criterion = nn.BCELoss()
+    criterion = FC()
     model.eval()
     test_loss, cnt = 0, 0
     f1, auc = 0, 0
@@ -72,7 +72,7 @@ def eval(model, device, test_loader):
             output = output.cpu().detach().numpy().flat
             targets = targets.cpu().detach().numpy().flat
 
-            output = np.array(output >= 0.01, dtype=float)
+            output = np.array(output >= 0.3, dtype=float)
             # print(output)
             
             cnt += 1
