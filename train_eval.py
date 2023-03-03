@@ -28,7 +28,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
         optimizer.zero_grad()
 
         output, mmd_loss = model(imgs_x, imgs_y)
-        bce_loss = criterion(output, targets.type(torch.float))
+        bce_loss = criterion(nn.Sigmoid(output), targets.type(torch.float))
         loss = bce_loss + ld * mmd_loss
         
         sumloss += loss.item()
@@ -64,7 +64,7 @@ def eval(model, device, test_loader):
             imgs, targets = imgs.to(device), targets.to(device)
 
             output, _ = model(imgs, None)
-            loss = criterion(output, targets.type(torch.float))
+            loss = criterion(nn.Sigmoid(output), targets.type(torch.float))
             
             print_loss = loss.item()
             test_loss += print_loss
