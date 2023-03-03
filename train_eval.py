@@ -75,14 +75,14 @@ def eval(model, device, test_loader):
 
             output = np.array(output >= 0.5, dtype=float)
             # print(output)
-            
+            print(output)
             reshape_t = np.append(reshape_t, targets)
             reshape_o = np.append(reshape_o, output)
 
             cnt += 1
         reshape_t = np.transpose(reshape_t)
         reshape_o = np.transpose(reshape_t)
-        print(reshape_t)
+        # print(reshape_t)
         avgloss = test_loss / cnt
         f1, auc = 0, 0
         for i in range(8):
