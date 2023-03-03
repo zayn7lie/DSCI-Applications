@@ -73,7 +73,7 @@ def eval(model, device, test_loader):
             targets = targets.cpu().detach().numpy().flat
 
             output = np.array(output >= 0.5, dtype=float)
-            # print(output)
+            print(output)
             
             cnt += 1
             f1 += f1_score(targets, output)
