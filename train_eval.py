@@ -72,7 +72,7 @@ def eval(model, device, test_loader):
             output = output.cpu().detach().numpy().flat
             targets = targets.cpu().detach().numpy().flat
 
-            output = np.array(output >= 0.5, dtype=float)
+            output = np.array(output >= 0.4, dtype=float)
             # print(output)
             
             cnt += 1
