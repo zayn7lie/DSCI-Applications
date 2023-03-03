@@ -78,9 +78,9 @@ def eval(model, device, test_loader):
 
             reshape_t = np.append(reshape_t, targets, axis=0)
             reshape_o = np.append(reshape_o, output, axis=0)
+            print(reshape_o)
 
             cnt += 1
-        print(reshape_o)
         reshape_t = np.transpose(reshape_t)
         reshape_o = np.transpose(reshape_t)
         # print(reshape_t)
