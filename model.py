@@ -86,52 +86,25 @@ class DropBlock2D(nn.Module):
     def _compute_gamma(self, x):
         return self.drop_prob / (self.block_size ** 2)
 
-class FC(nn.Module):
-    def __init__(self, gamma_neg=2, gamma_pos=2, clip=0, eps=1e-8, disable_torch_grad_focal_loss=True):
-        super(FC, self).__init__()
+class BCEFocalLosswithLogits(nn.Module):
+    def __init__(self, gamma=0.2, alpha=0.6, reduction='mean'):
+        super(BCEFocalLosswithLogits, self).__init__()
+        self.gamma = gamma
+        self.alpha = alpha
+        self.reduction = reduction
 
-        self.gamma_neg = gamma_neg
-        self.gamma_pos = gamma_pos
-        self.clip = clip
-        self.disable_torch_grad_focal_loss = disable_torch_grad_focal_loss
-        self.eps = eps
-
-    def forward(self, x, y):
-        """"
-        Parameters
-        ----------
-        x: input logits
-        y: targets (multi-label binarized vector)
-        """
-
-        # Calculating Probabilities
-        x_sigmoid = torch.sigmoid(x)
-        xs_pos = x_sigmoid
-        xs_neg = 1 - x_sigmoid
-
-        # Asymmetric Clipping
-        if self.clip is not None and self.clip > 0:
-            xs_neg = (xs_neg + self.clip).clamp(max=1)
-
-        # Basic CE calculation
-        los_pos = y * torch.log(xs_pos.clamp(min=self.eps))
-        los_neg = (1 - y) * torch.log(xs_neg.clamp(min=self.eps))
-        loss = los_pos + los_neg
-
-        # Asymmetric Focusing
-        if self.gamma_neg > 0 or self.gamma_pos > 0:
-            if self.disable_torch_grad_focal_loss:
-                torch.set_grad_enabled(False)
-            pt0 = xs_pos * y
-            pt1 = xs_neg * (1 - y)  # pt = p if t > 0 else 1-p
-            pt = pt0 + pt1
-            one_sided_gamma = self.gamma_pos * y + self.gamma_neg * (1 - y)
-            one_sided_w = torch.pow(1 - pt, one_sided_gamma)
-            if self.disable_torch_grad_focal_loss:
-                torch.set_grad_enabled(True)
-            loss *= one_sided_w
-
-        return -loss.sum()
+    def forward(self, logits, target):
+        # logits: [N, H, W], target: [N, H, W]
+        logits = nn.functional.sigmoid(logits)
+        alpha = self.alpha
+        gamma = self.gamma
+        loss = - alpha * (1 - logits) ** gamma * target * torch.log(logits) - \
+               (1 - alpha) * logits ** gamma * (1 - target) * torch.log(1 - logits)
+        if self.reduction == 'mean':
+            loss = loss.mean()
+        elif self.reduction == 'sum':
+            loss = loss.sum()
+        return loss
 
 class RMMD(models.ResNet):
     def __init__(self, drop_prob=0.1, block_size=7):
@@ -190,4 +163,4 @@ class RMMD(models.ResNet):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
 
-        return self.sigm(x), mmd_loss
+        return x, mmd_loss

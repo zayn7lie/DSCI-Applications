@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from model import FC
+from model import BCEFocalLosswithLogits
 
 def adjust_lr(optimizer, epoch, modellr):
     modellrnew = modellr * (0.1 ** (epoch // 25)) # 25
@@ -9,7 +9,7 @@ def adjust_lr(optimizer, epoch, modellr):
         param_group['lr'] = modellrnew
 
 def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
-    criterion = FC() #nn.BCELoss() #
+    criterion = BCEFocalLosswithLogits() # nn.BCEWithLogitsLoss()
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
     cnt = 0
@@ -53,10 +53,12 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 
 def eval(model, device, test_loader):
-    criterion = FC()
+    criterion = BCEFocalLosswithLogits()
     model.eval()
     test_loss, cnt = 0, 0
     f1, auc = 0, 0
+    sum_o = []
+    sum_t = []
     # total_num = len(test_loader.dataset)
     # print(total_num, len(test_loader))
     with torch.no_grad():
@@ -70,15 +72,15 @@ def eval(model, device, test_loader):
             test_loss += print_loss
 
             output = output.cpu().detach().numpy()
+            output = np.array(output >= 0.5, dtype=float)
             targets = targets.cpu().detach().numpy()
             
-            print(output)
-            output = np.array(output >= 0.5, dtype=float)
-            print(output)
+            sum_o.append(output)
+            sum_t.append(targets)
             
             cnt += 1
-            f1 += f1_score(targets, output)
-            auc += roc_auc_score(targets, output)
+            # f1 += f1_score(targets, output)
+            # auc += roc_auc_score(targets, output)
 
         avgloss = test_loss / cnt
         avgf1 = f1 * 100 / cnt
