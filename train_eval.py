@@ -81,7 +81,7 @@ def eval(model, device, test_loader):
             cnt += 1
             # f1 += f1_score(targets, output)
             # auc += roc_auc_score(targets, output)
-
+        print(sum_o)
         avgloss = test_loss / cnt
         avgf1 = f1 * 100 / cnt
         avgauc = auc * 100 / cnt
