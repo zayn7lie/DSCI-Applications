@@ -82,6 +82,7 @@ def eval(model, device, test_loader):
             cnt += 1
         reshape_t = np.transpose(reshape_t)
         reshape_o = np.transpose(reshape_t)
+        print(reshape_t)
         avgloss = test_loss / cnt
         f1, auc = 0, 0
         for i in range(8):
