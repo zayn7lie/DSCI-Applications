@@ -75,8 +75,8 @@ def eval(model, device, test_loader):
             output = np.array(output >= 0.5, dtype=float)
             targets = targets.cpu().detach().numpy()
             
-            sum_o.append(output)
-            sum_t.append(targets)
+            np.insert(sum_o, 1, output, axis=0)
+            np.insert(sum_t, 1, targets, axis=0)
             
             cnt += 1
             # f1 += f1_score(targets, output)
