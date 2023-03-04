@@ -39,7 +39,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, 
         optimizer.step()
         
         if (batch_idx + 1) % 15 == 0:
-            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 45, maxloss, minloss))
+            print("- [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 15, maxloss, minloss))
             sumloss, minloss, maxloss = 0, 100, 0
 
     avg_loss, avg_mmd, avg_bce = sum_loss * 100 / len(tr_loader_x), sum_mmd * 100 / len(tr_loader_x), sum_bce * 100 / len(tr_loader_x)
@@ -75,9 +75,11 @@ def eval(model, device, test_loader):
 
         f1, auc = 0, 0
         for i in range(8):
-            f1 += f1_score(sum_t[i], sum_o[i])
-            auc += roc_auc_score(sum_t[i], sum_o[i])
+            temp_f1, temp_auc = f1_score(sum_t[i], sum_o[i]), roc_auc_score(sum_t[i], sum_o[i])
+            print("{:.0f}th: F1: {:.4f}% Auc: {:.4f}%".format(temp_f1, temp_auc))
+            f1 += temp_f1
+            auc += temp_auc
+
         avgf1 = f1 * 100 / 8
         avgauc = auc * 100 / 8
-
-        print('\nF1: {:.4f}% Auc: {:.4f}%\n'.format(avgf1, avgauc))
+        print("AVG: F1: {:.4f}% Auc: {:.4f}%\n".format(avgf1, avgauc))
