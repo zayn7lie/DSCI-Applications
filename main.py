@@ -14,7 +14,7 @@ import os
 def main():
     # para setting
     modellr = 1e-4
-    BATCH_SIZE = 30
+    BATCH_SIZE = 50
     NUM_WORKERS = 1 
     EPOCHS = 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
@@ -31,7 +31,7 @@ def main():
     fr_idx = iter(enumerate(kfold.split(np.arange(len(fr_dataset)))))
     to_idx = iter(enumerate(kfold.split(np.arange(len(to_dataset)))))
     for i in range(K):
-        print("{:.0f}th FOLD:".format(i + 1))
+        print("## {:.0f}th FOLD:".format(i + 1))
         fold_1, (fr_idx_tr, fr_idx_ts) = fr_idx.__next__()
         fold_2, (to_idx_tr, to_idx_ts) = to_idx.__next__()
 
@@ -45,7 +45,7 @@ def main():
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
         for ld in [0.01, 0]:
             # load model
-            print("\nLAMBDA = {:.4f}\n".format(ld))
+            print("\n### LAMBDA = {:.4f}\n".format(ld))
             model = RMMD()
             model.to(DEVICE)
             if os.path.exists("./modelCache.pt"):
