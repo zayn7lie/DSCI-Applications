@@ -76,7 +76,7 @@ def eval(model, device, test_loader):
         f1, auc = 0, 0
         for i in range(8):
             temp_f1, temp_auc = f1_score(sum_t[i], sum_o[i]), roc_auc_score(sum_t[i], sum_o[i])
-            print("{:.0f}th: F1: {:.4f}% Auc: {:.4f}%".format(temp_f1, temp_auc))
+            print("{:.0f}th: F1: {:.4f}% Auc: {:.4f}%".format(i, temp_f1, temp_auc))
             f1 += temp_f1
             auc += temp_auc
 
