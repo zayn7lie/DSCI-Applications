@@ -1,6 +1,7 @@
 from dataset import odirData
 from model import RMMD
 from train_eval import train, eval, adjust_lr
+from model import BCEFocalLosswithLogits
 
 import torch
 from torch.utils.data import DataLoader, SubsetRandomSampler as SRS
@@ -18,6 +19,7 @@ def main():
     EPOCHS = 50
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 10 # k-fold
+    criterion = BCEFocalLosswithLogits() # torch.nn.BCEWithLogitsLoss()
     ld = 0.0000 #lambda
 
     # load data
@@ -41,8 +43,7 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for i in [0.0000, 0.0800]:
-            ld = i
+        for criterion in [BCEFocalLosswithLogits(), torch.nn.BCEWithLogitsLoss()]:
             # load model
             print("\nLAMBDA = {:.4f}\n".format(ld))
             model = RMMD()
@@ -54,7 +55,7 @@ def main():
             optimizer = optim.Adam(model.parameters(), lr=modellr)
             for epoch in range(EPOCHS):
                 adjust_lr(optimizer, epoch, modellr)
-                train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, ld)
+                train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, criterion, ld)
             torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 10000))
             
             # evaluate model

@@ -1,6 +1,4 @@
 import torch
-from torch import nn
-from model import BCEFocalLosswithLogits
 
 def adjust_lr(optimizer, epoch, modellr):
     modellrnew = modellr * (0.1 ** (epoch // 25)) # 25
@@ -8,8 +6,7 @@ def adjust_lr(optimizer, epoch, modellr):
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
 
-def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, ld):
-    criterion = BCEFocalLosswithLogits() # nn.BCEWithLogitsLoss()
+def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, ld):
     model.train()
     sum_loss, sum_mmd, sum_bce = 0, 0, 0
     cnt = 0
@@ -53,7 +50,6 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 
 def eval(model, device, test_loader):
-    criterion = BCEFocalLosswithLogits()
     model.eval()
     sum_o = []
     sum_t = []
