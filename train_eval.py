@@ -73,7 +73,7 @@ def eval(model, device, test_loader):
         sum_t = np.transpose(sum_t)
 
         f1, auc = 0, 0
-        TH = [0.5, 0.3, 1e-2, 1e-2, 1e-4, 1e-6, 1e-4, 0.4]
+        TH = [0.5, 0.3, 0.1, 0.1, 1e-2, 1e-3, 1e-2, 0.4]
         for i in range(8):
             print(sum_t[i])
             print(np.array(sum_o[i] >= TH[i], dtype=float))
