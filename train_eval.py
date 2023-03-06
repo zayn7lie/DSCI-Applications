@@ -73,7 +73,7 @@ def eval(model, device, test_loader):
         sum_t = np.transpose(sum_t)
 
         f1, auc = 0, 0
-        TH = [0.5, 0.4, 1e-3, 0.5, 1e-10, 1e-10, 0.5, 0.5]
+        TH = [0.5, 0.4, 1e-3, 0.5, 1e-7, 1e-7, 0.5, 0.5]
         for i in range(8):
             temp_f1, temp_auc = f1_score(sum_t[i], np.array(sum_o[i] >= TH[i], dtype=float)), roc_auc_score(sum_t[i], sum_o[i])
             print("- {:.0f}th: F1: {:.4f}% Auc: {:.4f}%".format(i, temp_f1, temp_auc))
