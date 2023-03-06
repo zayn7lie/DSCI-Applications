@@ -62,7 +62,7 @@ def eval(model, device, test_loader):
             output, _ = model(imgs, None)
 
             output = output.cpu().detach().numpy()
-            output = np.array(output >= 0.5, dtype=float)
+            output = np.array(output >= 0.4, dtype=float)
             targets = targets.cpu().detach().numpy()
             
             for i in output:
