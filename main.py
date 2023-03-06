@@ -14,9 +14,9 @@ import os
 def main():
     # para setting
     modellr = 1e-4
-    BATCH_SIZE = 60
+    BATCH_SIZE = 20
     NUM_WORKERS = 1
-    EPOCHS = 50
+    EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 10 # k-fold
     criterion = BCEFocalLosswithLogits() # torch.nn.BCEWithLogitsLoss()
