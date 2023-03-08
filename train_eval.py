@@ -1,7 +1,7 @@
 import torch
 
 def adjust_lr(optimizer, epoch, modellr):
-    modellrnew = modellr * (0.1 ** (epoch // 20))
+    modellrnew = modellr * (0.1 ** (epoch // 100))
     print("- Epoch:", epoch + 1, "Learning Rate:", modellrnew)
     for param_group in optimizer.param_groups:
         param_group['lr'] = modellrnew
@@ -38,7 +38,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, 
         loss.backward()
         optimizer.step()
         
-        if (batch_idx + 1) % 25 == 0:
+        if (batch_idx + 1) % 40 == 0:
             print("    - [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 25, maxloss, minloss))
             sumloss, minloss, maxloss = 0, 100, 0
 
