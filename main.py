@@ -14,7 +14,7 @@ import os
 def main():
     # para setting
     modellr = 1e-3
-    BATCH_SIZE = 10
+    BATCH_SIZE = 25
     NUM_WORKERS = 2
     EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
