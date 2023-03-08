@@ -45,7 +45,7 @@ def main():
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
         for ld in [1e-14, 0]:
             # load model
-            print("\n### LAMBDA = {:.0f} * 1e-9\n".format(ld * 1e14))
+            print("\n### LAMBDA = {:.0f} * 1e-14\n".format(ld * 1e14))
             model = RMMD()
             model.to(DEVICE)
             if os.path.exists("./modelCache.pt"):
