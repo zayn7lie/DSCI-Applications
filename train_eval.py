@@ -70,7 +70,7 @@ def eval(model, device, test_loader):
                 sum_t.append(i)
             
         sum_o = np.transpose(sum_o)
-        print(sum_o)
+        # print(sum_o)
         sum_t = np.transpose(sum_t)
 
         f1, auc = 0, 0
