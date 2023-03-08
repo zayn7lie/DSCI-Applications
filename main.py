@@ -13,7 +13,7 @@ import os
 
 def main():
     # para setting
-    modellr = 1e-4
+    modellr = 1e-3
     BATCH_SIZE = 20
     NUM_WORKERS = 1
     EPOCHS = 60
