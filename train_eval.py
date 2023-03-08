@@ -38,8 +38,8 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, 
         loss.backward()
         optimizer.step()
         
-        if (batch_idx + 1) % 15 == 0:
-            print("    - [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 15, maxloss, minloss))
+        if (batch_idx + 1) % 25 == 0:
+            print("    - [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 25, maxloss, minloss))
             sumloss, minloss, maxloss = 0, 100, 0
 
     avg_loss, avg_mmd, avg_bce = sum_loss * 100 / len(tr_loader_x), sum_mmd * 100 / len(tr_loader_x), sum_bce * 100 / len(tr_loader_x)
@@ -70,6 +70,7 @@ def eval(model, device, test_loader):
                 sum_t.append(i)
             
         sum_o = np.transpose(sum_o)
+        print(sum_o)
         sum_t = np.transpose(sum_t)
 
         f1, auc = 0, 0

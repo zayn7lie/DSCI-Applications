@@ -11,13 +11,13 @@ class odirData(Dataset):
     def __init__(self, path):
         self.path = path
         self.transform_o = transforms.Compose([
-            transforms.Resize(224),
+            transforms.Resize(168),
             transforms.CenterCrop(224), # crop
             transforms.ToTensor(),
             # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
         ])
         self.transform_f = transforms.Compose([
-            transforms.Resize(200),
+            transforms.Resize(168),
             transforms.CenterCrop(224), # crop
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),

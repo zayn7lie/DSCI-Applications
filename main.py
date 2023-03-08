@@ -18,7 +18,7 @@ def main():
     NUM_WORKERS = 1
     EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
-    K = 10 # k-fold
+    K = 1 # k-fold
     criterion = BCEFocalLosswithLogits() # torch.nn.BCEWithLogitsLoss()
     ld = 0.0000 #lambda
 
@@ -27,23 +27,23 @@ def main():
     to_dataset = odirData("./OIA-ODIR/On-site Test Set")
 
     # K-fold
-    kfold = KFold(n_splits=K, shuffle=True)
-    fr_idx = iter(enumerate(kfold.split(np.arange(len(fr_dataset)))))
-    to_idx = iter(enumerate(kfold.split(np.arange(len(to_dataset)))))
+    # kfold = KFold(n_splits=K, shuffle=True)
+    # fr_idx = iter(enumerate(kfold.split(np.arange(len(fr_dataset)))))
+    # to_idx = iter(enumerate(kfold.split(np.arange(len(to_dataset)))))
     for i in range(K):
-        print("## {:.0f}th FOLD:".format(i + 1))
-        fold_1, (fr_idx_tr, fr_idx_ts) = fr_idx.__next__()
-        fold_2, (to_idx_tr, to_idx_ts) = to_idx.__next__()
+        # print("## {:.0f}th FOLD:".format(i + 1))
+        # fold_1, (fr_idx_tr, fr_idx_ts) = fr_idx.__next__()
+        # fold_2, (to_idx_tr, to_idx_ts) = to_idx.__next__()
 
         # split data
-        fr_tr_idxs, fr_ts_idxs = SRS(fr_idx_tr), SRS(fr_idx_ts)
-        to_tr_idxs, to_ts_idxs = SRS(to_idx_tr), SRS(to_idx_ts)
-        tr_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_tr_idxs)
-        tr_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_tr_idxs)
-        ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_ts_idxs)
-        ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_ts_idxs)
+        # fr_tr_idxs, fr_ts_idxs = SRS(fr_idx_tr), SRS(fr_idx_ts)
+        # to_tr_idxs, to_ts_idxs = SRS(to_idx_tr), SRS(to_idx_ts)
+        tr_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=fr_tr_idxs)
+        tr_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=to_tr_idxs)
+        ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=fr_ts_idxs)
+        ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for ld in [1e-14, 0]:
+        for ld in [1e-11, 0]:
             # load model
             print("\n### LAMBDA = {:.0f} * 1e-14\n".format(ld * 1e14))
             model = RMMD()
