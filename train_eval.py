@@ -39,7 +39,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, 
         optimizer.step()
         
         if (batch_idx + 1) % 40 == 0:
-            print("    - [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 25, maxloss, minloss))
+            print("    - [{:.0f}/{:.0f}] Loss: AVG={:.6f} MAX={:.6f} MIN={:.6f}".format((batch_idx + 1), len(tr_loader_x), sumloss / 40, maxloss, minloss))
             sumloss, minloss, maxloss = 0, 100, 0
 
     avg_loss, avg_mmd, avg_bce = sum_loss * 100 / len(tr_loader_x), sum_mmd * 100 / len(tr_loader_x), sum_bce * 100 / len(tr_loader_x)
