@@ -86,16 +86,15 @@ class DropBlock2D(nn.Module):
     def _compute_gamma(self, x):
         return self.drop_prob / (self.block_size ** 2)
 
-class BCEFocalLosswithLogits(nn.Module):
+class BCEFocalLoss(nn.Module):
     def __init__(self, gamma=0.2, alpha=0.6, reduction='mean'):
-        super(BCEFocalLosswithLogits, self).__init__()
+        super(BCEFocalLoss, self).__init__()
         self.gamma = gamma
         self.alpha = alpha
         self.reduction = reduction
 
     def forward(self, logits, target):
         # logits: [N, H, W], target: [N, H, W]
-        logits = torch.sigmoid(logits)
         alpha = self.alpha
         gamma = self.gamma
         loss = - alpha * (1 - logits) ** gamma * target * torch.log(logits) - \
@@ -163,4 +162,4 @@ class RMMD(models.ResNet):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
 
-        return x, mmd_loss
+        return self.sigm(x), mmd_loss
