@@ -15,7 +15,7 @@ def main():
     # para setting
     modellr = 1e-3
     BATCH_SIZE = 10
-    NUM_WORKERS = 1
+    NUM_WORKERS = 2
     EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 1 # k-fold
