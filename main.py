@@ -19,7 +19,7 @@ def main():
     EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 1 # k-fold
-    criterion = BCEFocalLoss() # torch.nn.BCELoss() # 
+    criterion = torch.nn.BCELoss() # BCEFocalLoss() # 
     ld = 0.0000 #lambda
 
     # load data
@@ -43,7 +43,7 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for ld in [1e-11, 0, 1e-9, 1e-10, 1e-12]:
+        for ld in [1e-5, 0, 1e-6, 1e-7, 1e-8, 1e-9]:
             # load model
             print("\n### LAMBDA = {:.0f} * 1e-14\n".format(ld * 1e14))
             model = RMMD()
