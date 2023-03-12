@@ -48,8 +48,9 @@ def main():
             print("\n### LAMBDA = {:.0f} * 1e-14\n".format(ld * 1e14))
             model = RMMD()
             model.to(DEVICE)
-            if os.path.exists("./modelCache.pt"):
-                model.load_state_dict(torch.load("./modelCache.pt"))
+            if os.path.exists("./modelCache_{:.0f}.pt".format(ld * 1e14)):
+                model.load_state_dict(torch.load("./modelCache_{:.0f}.pt".format(ld * 1e14)))
+                EPOCHS = 0
 
             # train model
             optimizer = optim.Adam(model.parameters(), lr=modellr)
