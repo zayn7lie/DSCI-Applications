@@ -46,7 +46,7 @@ def main():
         for ld in [0, 1e-6]:
             # load model
             epochs = EPOCHS
-            print("\n### LAMBDA = {:.0f} * 1e-8\n".format(ld * 1e8))
+            print("### LAMBDA = {:.0f} * 1e-8\n".format(ld * 1e8))
             model = RMMD()
             model.to(DEVICE)
             if os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e8)):
