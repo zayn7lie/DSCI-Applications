@@ -49,8 +49,8 @@ def main():
             print("\n### LAMBDA = {:.0f} * 1e-8\n".format(ld * 1e8))
             model = RMMD()
             model.to(DEVICE)
-            if os.path.exists("./modelCache_{:.0f}.pt".format(ld * 1e8)):
-                model.load_state_dict(torch.load("./modelCache_{:.0f}.pt".format(ld * 1e8)))
+            if os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e8)):
+                model.load_state_dict(torch.load("../modelCache_{:.0f}.pt".format(ld * 1e8)))
                 epochs = 20
 
             # train model
