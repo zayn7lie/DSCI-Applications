@@ -51,7 +51,7 @@ def main():
             model.to(DEVICE)
             if os.path.exists("./modelCache_{:.0f}.pt".format(ld * 1e8)):
                 model.load_state_dict(torch.load("./modelCache_{:.0f}.pt".format(ld * 1e8)))
-                epochs = 0
+                epochs = 20
 
             # train model
             optimizer = optim.Adam(model.parameters(), lr=modellr)
