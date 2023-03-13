@@ -43,7 +43,7 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for ld in [0, 1e-7, 1e-6, 1e-5, 1e-8]:
+        for ld in [0, 1e-6]:
             # load model
             epochs = EPOCHS
             print("\n### LAMBDA = {:.0f} * 1e-8\n".format(ld * 1e8))
@@ -51,8 +51,8 @@ def main():
             model.to(DEVICE)
             if os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e8)):
                 model.load_state_dict(torch.load("../modelCache_{:.0f}.pt".format(ld * 1e8)))
-                epochs = 20
-                print("Model Loaded")
+                epochs = 0
+                print("Model Loaded\n")
 
             # train model
             optimizer = optim.Adam(model.parameters(), lr=modellr)
