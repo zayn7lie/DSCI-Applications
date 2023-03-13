@@ -43,14 +43,14 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS)#, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for ld in [1e-9, 1e-5, 0, 1e-6, 1e-7, 1e-8]:
+        for ld in [0, 1e-7, 1e-6, 1e-5, 1e-8]:
             # load model
             epochs = EPOCHS
-            print("\n### LAMBDA = {:.0f} * 1e-14\n".format(ld * 1e14))
+            print("\n### LAMBDA = {:.0f} * 1e-8\n".format(ld * 1e8))
             model = RMMD()
             model.to(DEVICE)
-            if os.path.exists("./modelCache_{:.0f}.pt".format(ld * 1e14)):
-                model.load_state_dict(torch.load("./modelCache_{:.0f}.pt".format(ld * 1e14)))
+            if os.path.exists("./modelCache_{:.0f}.pt".format(ld * 1e8)):
+                model.load_state_dict(torch.load("./modelCache_{:.0f}.pt".format(ld * 1e8)))
                 epochs = 0
 
             # train model
@@ -58,7 +58,7 @@ def main():
             for epoch in range(epochs):
                 adjust_lr(optimizer, epoch, modellr)
                 train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, criterion, ld)
-            torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 1e14))
+            torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 1e8))
             
             # evaluate model
             eval(model, DEVICE, ts_loader_y)
