@@ -46,11 +46,11 @@ def main():
         for ld in [0, 1e-6]:
             # load model
             epochs = EPOCHS
-            print("### LAMBDA = {:.0f} * 1e-8\n".format(ld * 1e8))
+            print("### LAMBDA = {:.0f} * 1e-7\n".format(ld * 1e7))
             model = RMMD()
             model.to(DEVICE)
-            if os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e8)):
-                model.load_state_dict(torch.load("../modelCache_{:.0f}.pt".format(ld * 1e8)))
+            if os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e7)):
+                model.load_state_dict(torch.load("../modelCache_{:.0f}.pt".format(ld * 1e7)))
                 epochs = 0
                 print("Model Loaded\n")
 
@@ -59,7 +59,7 @@ def main():
             for epoch in range(epochs):
                 adjust_lr(optimizer, epoch, modellr)
                 train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, criterion, ld)
-            torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 1e8))
+            torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 1e7))
             
             # evaluate model
             eval(model, DEVICE, ts_loader_y)
