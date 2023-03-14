@@ -25,7 +25,7 @@ def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, 
         optimizer.zero_grad()
 
         output, mmd_loss = model(imgs_x, imgs_y)
-        bce_loss = criterion(output, targets.type(torch.float))
+        bce_loss = criterion(output, targets)
         loss = bce_loss + ld * mmd_loss
         
         sumloss += loss.item()
