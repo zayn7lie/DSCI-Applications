@@ -87,7 +87,7 @@ class DropBlock2D(nn.Module):
         return self.drop_prob / (self.block_size ** 2)
 
 class BCELogitsFocalLoss(nn.Module):
-    def __init__(self, gamma=2):
+    def __init__(self, gamma=0.2):
         super(BCELogitsFocalLoss, self).__init__()
         self.gamma = gamma
 
@@ -123,9 +123,9 @@ class RMMD(models.ResNet):
         x = self.maxpool(x)
 
         x = self.layer1(x)
-        x = self.dropblock(x)
+        # x = self.dropblock(x)
         x = self.layer2(x)
-        x = self.dropblock(x)
+        # x = self.dropblock(x)
         x = self.layer3(x)
         
         # ResNet-50 with MMD
@@ -137,9 +137,9 @@ class RMMD(models.ResNet):
             y = self.maxpool(y)
 
             y = self.layer1(y)
-            y = self.dropblock(y)
+            # y = self.dropblock(y)
             y = self.layer2(y)
-            y = self.dropblock(y)
+            # y = self.dropblock(y)
             y = self.layer3(y)
 
             x_ = x.view(x.size(0), -1)
