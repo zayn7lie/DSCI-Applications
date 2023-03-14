@@ -49,7 +49,7 @@ def main():
             print("### LAMBDA = {:.0f} * 1e-7\n".format(ld * 1e7))
             model = RMMD()
             model.to(DEVICE)
-            if 1 == 0: # os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e7)):
+            if os.path.exists("../modelCache_{:.0f}.pt".format(ld * 1e7)):
                 model.load_state_dict(torch.load("../modelCache_{:.0f}.pt".format(ld * 1e7)))
                 epochs = 0
                 print("Model Loaded\n")
