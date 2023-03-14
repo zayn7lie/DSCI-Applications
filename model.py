@@ -98,7 +98,7 @@ class BCELogitsFocalLoss(nn.Module):
         logits = torch.sigmoid(logits)
         alpha = self.alpha
         gamma = self.gamma
-        loss = - alpha * (1 - logits) ** gamma * target * torch.log(logits) - \
+        loss = - alpha * (1 - logits) ** gamma * target * torch.log(logits + 1e-8) - \
                (1 - alpha) * logits ** gamma * (1 - target) * torch.log(1 - logits)
         if self.reduction == 'mean':
             loss = loss.mean()
