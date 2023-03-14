@@ -61,7 +61,7 @@ def eval(model, device, test_loader):
 
             output, _ = model(imgs, None)
 
-            output = output.cpu().detach().numpy()
+            output = (torch.sigmoid(output)).cpu().detach().numpy()
             targets = targets.cpu().detach().numpy()
             
             for i in output:
