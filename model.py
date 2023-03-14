@@ -87,24 +87,17 @@ class DropBlock2D(nn.Module):
         return self.drop_prob / (self.block_size ** 2)
 
 class BCELogitsFocalLoss(nn.Module):
-    def __init__(self, gamma=0.2, alpha=0.6, reduction='mean'):
+    def __init__(self, gamma=2):
         super(BCELogitsFocalLoss, self).__init__()
         self.gamma = gamma
-        self.alpha = alpha
-        self.reduction = reduction
 
-    def forward(self, logits, target):
-        # logits: [N, H, W], target: [N, H, W]
-        logits = torch.sigmoid(logits)
-        alpha = self.alpha
-        gamma = self.gamma
-        loss = - alpha * (1 - logits) ** gamma * target * torch.log(torch.clamp(logits, 1e-8, 1.0)) - \
-               (1 - alpha) * logits ** gamma * (1 - target) * torch.log(torch.clamp(1 - logits, 1e-8, 1.0))
-        if self.reduction == 'mean':
-            loss = loss.mean()
-        elif self.reduction == 'sum':
-            loss = loss.sum()
-        return loss
+    def forward(self, inputs, targets):
+        sigmoid_inputs = torch.sigmoid(inputs)
+        pos_loss = -targets * (1 - sigmoid_inputs)**self.gamma * torch.log(sigmoid_inputs + 1e-10)
+        neg_loss = -(1 - targets) * sigmoid_inputs**self.gamma * torch.log(1 - sigmoid_inputs + 1e-10)
+        loss = pos_loss + neg_loss
+        return loss.mean()
+
 
 class RMMD(models.ResNet):
     def __init__(self, drop_prob=0.1, block_size=7):
