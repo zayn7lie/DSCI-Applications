@@ -123,9 +123,9 @@ class RMMD(models.ResNet):
         x = self.maxpool(x)
 
         x = self.layer1(x)
-        # x = self.dropblock(x)
+        x = self.dropblock(x)
         x = self.layer2(x)
-        # x = self.dropblock(x)
+        x = self.dropblock(x)
         x = self.layer3(x)
         
         # ResNet-50 with MMD
@@ -137,9 +137,9 @@ class RMMD(models.ResNet):
             y = self.maxpool(y)
 
             y = self.layer1(y)
-            # y = self.dropblock(y)
+            y = self.dropblock(y)
             y = self.layer2(y)
-            # y = self.dropblock(y)
+            y = self.dropblock(y)
             y = self.layer3(y)
 
             x_ = x.view(x.size(0), -1)
