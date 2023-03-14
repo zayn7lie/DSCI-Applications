@@ -93,12 +93,13 @@ class BCELogitsFocalLoss(nn.Module):
             self.gamma = gamma
             
     def forward(self, inputs, targets):
-            BCE_loss = nn.functional.binary_cross_entropy_with_logits(inputs, targets, reduction='none')        
-            targets = targets.type(torch.long)        
-            at = self.alpha.gather(0, targets.data.view(-1))        
-            pt = torch.exp(-BCE_loss)        
-            F_loss = at*(1-pt)**self.gamma * BCE_loss        
-            return F_loss.mean()
+            p = torch.sigmoid(inputs)
+            BCE_loss = nn.functional.binary_cross_entropy_with_logits(inputs, targets, reduction="none")
+            p_t = p * targets + (1 - p) * (1 - targets)
+            loss = BCE_loss * ((1 - p_t) ** self.gamma)
+            alpha_t = self.alpha * targets + (1 - self.alpha) * (1 - targets)
+            loss = alpha_t * loss
+            return loss.mean()
 
 class RMMD(models.ResNet):
     def __init__(self, drop_prob=0.1, block_size=7):
