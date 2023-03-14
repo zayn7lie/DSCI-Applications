@@ -86,24 +86,19 @@ class DropBlock2D(nn.Module):
     def _compute_gamma(self, x):
         return self.drop_prob / (self.block_size ** 2)
 
-class BCEFocalLoss(nn.Module):
-    def __init__(self, gamma=0.2, alpha=0.6, reduction='mean'):
-        super(BCEFocalLoss, self).__init__()
-        self.gamma = gamma
-        self.alpha = alpha
-        self.reduction = reduction
-
-    def forward(self, logits, target):
-        # logits: [N, H, W], target: [N, H, W]
-        alpha = self.alpha
-        gamma = self.gamma
-        loss = - alpha * (1 - logits) ** gamma * target * torch.log(logits) - \
-               (1 - alpha) * logits ** gamma * (1 - target) * torch.log(1 - logits)
-        if self.reduction == 'mean':
-            loss = loss.mean()
-        elif self.reduction == 'sum':
-            loss = loss.sum()
-        return loss
+class BCELogitsFocalLoss(nn.Module):
+    def __init__(self, alpha=.25, gamma=2):
+            super(BCELogitsFocalLoss, self).__init__()        
+            self.alpha = torch.tensor([alpha, 1-alpha]).cuda()        
+            self.gamma = gamma
+            
+    def forward(self, inputs, targets):
+            BCE_loss = nn.functional.binary_cross_entropy_with_logits(inputs, targets, reduction='none')        
+            targets = targets.type(torch.long)        
+            at = self.alpha.gather(0, targets.data.view(-1))        
+            pt = torch.exp(-BCE_loss)        
+            F_loss = at*(1-pt)**self.gamma * BCE_loss        
+            return F_loss.mean()
 
 class RMMD(models.ResNet):
     def __init__(self, drop_prob=0.1, block_size=7):
@@ -162,4 +157,4 @@ class RMMD(models.ResNet):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
 
-        return self.sigm(x), mmd_loss
+        return x, mmd_loss

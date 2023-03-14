@@ -1,7 +1,7 @@
 from dataset import odirData
 from model import RMMD
 from train_eval import train, eval, adjust_lr
-from model import BCEFocalLoss
+from model import BCELogitsFocalLoss
 
 import torch
 from torch.utils.data import DataLoader, SubsetRandomSampler as SRS
@@ -19,7 +19,7 @@ def main():
     EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 1 # k-fold
-    criterion = BCEFocalLoss() # torch.nn.BCELoss() # 
+    criterion = torch.nn.BCEWithLogitsLoss # BCELogitsFocalLoss() # 
     ld = 0.0000 #lambda
 
     # load data
