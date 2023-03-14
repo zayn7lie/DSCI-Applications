@@ -95,7 +95,7 @@ class BCELogitsFocalLoss(nn.Module):
 
     def forward(self, logits, target):
         # logits: [N, H, W], target: [N, H, W]
-        logits = nn.functional.sigmoid(logits)
+        logits = torch.sigmoid(logits)
         alpha = self.alpha
         gamma = self.gamma
         loss = - alpha * (1 - logits) ** gamma * target * torch.log(logits) - \
