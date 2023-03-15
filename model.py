@@ -98,7 +98,6 @@ class BCELogitsFocalLoss(nn.Module):
         loss = pos_loss + neg_loss
         return loss.mean()
 
-
 class RMMD(models.ResNet):
     def __init__(self, drop_prob=0.1, block_size=7):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)

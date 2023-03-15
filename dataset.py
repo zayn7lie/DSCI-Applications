@@ -17,8 +17,7 @@ class odirData(Dataset):
             # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
         ])
         self.transform_f = transforms.Compose([
-            transforms.Resize(168),
-            transforms.CenterCrop(224), # crop
+            transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
@@ -48,7 +47,7 @@ class odirData(Dataset):
 
         # img = plt.imread(img_name)
         img = Image.open(img_name)
-        img = self.transform_o(img)
+        img = self.transform_f(img)
         # print(label)
         return img, label
 
