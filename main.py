@@ -19,7 +19,7 @@ def main():
     EPOCHS = 60
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_device()
     K = 1 # k-fold
-    criterion = torch.nn.BCEWithLogitsLoss() # BCELogitsFocalLoss() # 
+    criterion = BCELogitsFocalLoss() # torch.nn.BCEWithLogitsLoss() # 
     ld = 0.0000 #lambda
 
     # load data
