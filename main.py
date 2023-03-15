@@ -23,8 +23,8 @@ def main():
     ld = 0.0000 #lambda
 
     # load data
-    fr_dataset = odirData("./OIA-ODIR/Training Set")
-    to_dataset = odirData("./OIA-ODIR/Off-site Test Set")
+    fr_dataset = odirData("./OIA-ODIR/Off-site Test Set")
+    to_dataset = odirData("./OIA-ODIR/On-site Test Set")
 
     # K-fold
     # kfold = KFold(n_splits=K, shuffle=True)
