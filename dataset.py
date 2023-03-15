@@ -8,8 +8,9 @@ import csv
 from PIL import Image
 
 class odirData(Dataset):
-    def __init__(self, path):
+    def __init__(self, path, TF=False):
         self.path = path
+        self.TF = TF
         self.transform_o = transforms.Compose([
             transforms.Resize(168),
             transforms.CenterCrop(224), # crop
@@ -47,7 +48,10 @@ class odirData(Dataset):
 
         # img = plt.imread(img_name)
         img = Image.open(img_name)
-        img = self.transform_f(img)
+        if self.TF:
+            img = self.transform_f(img)
+        else:
+            img = self.transform_o(img)
         # print(label)
         return img, label
 
