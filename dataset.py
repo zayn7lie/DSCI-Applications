@@ -47,7 +47,7 @@ class odirData(Dataset):
 
         # img = plt.imread(img_name)
         img = Image.open(img_name)
-        img = self.transform_o(img)
+        img = self.transform_f(img)
         # print(label)
         return img, label
 
