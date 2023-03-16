@@ -23,7 +23,7 @@ times = 100
 param = 0.1
 EPOCHS = 60
 
-ld = 1e-6 #lambda
+compare = [0, 1e-6] #lambda
 criterion = torch.nn.BCEWithLogitsLoss() # BCELogitsFocalLoss() # 
 TF = False
 DropBlock = False
@@ -37,7 +37,7 @@ def main():
     fr_idx = iter(enumerate(kfold.split(np.arange(len(fr_dataset)))))
     to_idx = iter(enumerate(kfold.split(np.arange(len(to_dataset)))))
     for i in range(K):
-        print("## {:.0f}th FOLD:".format(i + 1))
+        print("## {:.0f}th FOLD:\n".format(i + 1))
         fold_1, (fr_idx_tr, fr_idx_ts) = fr_idx.__next__()
         fold_2, (to_idx_tr, to_idx_ts) = to_idx.__next__()
 
@@ -49,7 +49,7 @@ def main():
         ts_loader_x = DataLoader(fr_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=fr_ts_idxs)
         ts_loader_y = DataLoader(to_dataset, BATCH_SIZE, num_workers=NUM_WORKERS, sampler=to_ts_idxs)
         # print("K-fold:", fr_idx_9, "+", to_idx_9, "->", to_idx_1)
-        for ld in [0, 1e-6]:
+        for ld in compare:
             # load model
             epochs = EPOCHS
             print("### LAMBDA = {:.0f} * 1e-7\n".format(ld * 1e7))
