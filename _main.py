@@ -24,12 +24,12 @@ param = 0.1
 EPOCHS = 60
 
 compare = [0, 1e-6] #lambda
-criterion = torch.nn.BCEWithLogitsLoss() # BCELogitsFocalLoss() # 
+criterion = BCELogitsFocalLoss() # torch.nn.BCEWithLogitsLoss() # 
 TF = False
 DropBlock = False
 
-fr_dataset = odirData("./OIA-ODIR/Training Set", TF=TF)
-to_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
+fr_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
+to_dataset = odirData("./OIA-ODIR/On-site Test Set", TF=TF)
 
 def main():
     # K-fold
