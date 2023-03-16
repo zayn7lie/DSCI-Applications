@@ -16,7 +16,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # xm.xla_d
 K = 10 # k-fold
 
 BATCH_SIZE = 15
-NUM_WORKERS = 6
+NUM_WORKERS = 2
 
 modellr = 1e-4
 times = 100
