@@ -87,7 +87,7 @@ class DropBlock2D(nn.Module):
         return self.drop_prob / (self.block_size ** 2)
 
 class BCELogitsFocalLoss(nn.Module):
-    def __init__(self, gamma=0.2):
+    def __init__(self, gamma=2):
         super(BCELogitsFocalLoss, self).__init__()
         self.gamma = gamma
 
@@ -99,21 +99,21 @@ class BCELogitsFocalLoss(nn.Module):
         return loss.mean()
 
 class RMMD(models.ResNet):
-    def __init__(self, drop_prob=0.1, block_size=7):
+    def __init__(self, DropBlock=False):
         super().__init__(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=8)
+        self.DropBlock=DropBlock
+
         self.mmd_transform = nn.Sequential(
             nn.Linear(1024 * 14 * 14, 256),
             nn.ReLU(inplace=True)
         )
         
         self.dropblock = LinearScheduler(
-            DropBlock2D(drop_prob=drop_prob, block_size=block_size),
+            DropBlock2D(drop_prob=0.1, block_size=7),
             start_value=0.,
-            stop_value=drop_prob,
+            stop_value=0.1,
             nr_steps=5e3
         )
-
-        self.sigm = nn.Sigmoid()
 
     def forward(self, x, y):
         x = self.conv1(x)
@@ -122,9 +122,9 @@ class RMMD(models.ResNet):
         x = self.maxpool(x)
 
         x = self.layer1(x)
-        # x = self.dropblock(x)
+        if self.DropBlock: x = self.dropblock(x)
         x = self.layer2(x)
-        # x = self.dropblock(x)
+        if self.DropBlock: x = self.dropblock(x)
         x = self.layer3(x)
         
         # ResNet-50 with MMD
@@ -136,9 +136,9 @@ class RMMD(models.ResNet):
             y = self.maxpool(y)
 
             y = self.layer1(y)
-            # y = self.dropblock(y)
+            if self.DropBlock: x = self.dropblock(x)
             y = self.layer2(y)
-            # y = self.dropblock(y)
+            if self.DropBlock: x = self.dropblock(x)
             y = self.layer3(y)
 
             x_ = x.view(x.size(0), -1)
