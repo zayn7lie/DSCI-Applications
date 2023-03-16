@@ -23,7 +23,7 @@ times = 100
 param = 0.1
 EPOCHS = 60
 
-compare = [0, 1e-6] #lambda
+compare = [1e-6] #lambda
 criterion = BCELogitsFocalLoss() # torch.nn.BCEWithLogitsLoss() # 
 TF = False
 DropBlock = False
