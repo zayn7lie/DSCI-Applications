@@ -29,7 +29,7 @@ TF = False
 DropBlock = False
 
 fr_dataset = odirData("./OIA-ODIR/Training Set", TF=TF)
-to_dataset = odirData("./OIA-ODIR/off-site Test Set", TF=TF)
+to_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
 
 def main():
     # K-fold
