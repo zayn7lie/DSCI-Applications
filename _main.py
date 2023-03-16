@@ -65,7 +65,7 @@ def main():
                 adjust_lr(optimizer, epoch, modellr, times=times, param=param)
                 train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, criterion, ld, BATCH_SIZE=BATCH_SIZE)
             
-            torch.save(model.state_dict(), "./modelCache_new.pt".format(ld * 1e7))
+            torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 1e6))
             
             # evaluate model
             eval(model, DEVICE, ts_loader_y)
