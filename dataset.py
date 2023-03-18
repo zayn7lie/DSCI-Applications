@@ -19,7 +19,7 @@ class odirData(Dataset):
         ])
         self.transform_f = transforms.Compose([
             transforms.Resize(168),
-            transforms.RandomResizedCrop(224),
+            transforms.CenterCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
