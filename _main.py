@@ -25,7 +25,7 @@ EPOCHS = 60
 
 compare = [1e-6, 0] #lambda
 criterion = torch.nn.BCEWithLogitsLoss() # BCELogitsFocalLoss() # 
-TF = True
+TF = False
 DropBlock = False
 
 fr_dataset = odirData("./OIA-ODIR/Training Set", TF=TF)
