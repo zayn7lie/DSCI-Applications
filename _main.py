@@ -23,13 +23,13 @@ times = 100
 param = 0.1
 EPOCHS = 60
 
-compare = [1e-6] #lambda
+compare = [1e-6, 0] #lambda
 criterion = torch.nn.BCEWithLogitsLoss() # BCELogitsFocalLoss() # 
 TF = True
 DropBlock = False
 
-fr_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
-to_dataset = odirData("./OIA-ODIR/On-site Test Set", TF=TF)
+fr_dataset = odirData("./OIA-ODIR/Training Set", TF=TF)
+to_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
 
 def main():
     # K-fold
@@ -63,7 +63,7 @@ def main():
             optimizer = optim.Adam(model.parameters(), lr=modellr)
             for epoch in range(epochs):
                 adjust_lr(optimizer, epoch, modellr, times=times, param=param)
-                train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, criterion, ld, BATCH_SIZE=BATCH_SIZE)
+                train(epoch + 1, model, DEVICE, tr_loader_x, tr_loader_y, optimizer, criterion, ld=ld, BATCH_SIZE=BATCH_SIZE)
             
             torch.save(model.state_dict(), "./modelCache_{:.0f}.pt".format(ld * 1e6))
             

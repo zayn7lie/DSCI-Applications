@@ -1,4 +1,4 @@
-def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, ld=0, BATCH_SIZE=25):
+def train(epoch, model, device, tr_loader_x, tr_loader_y, optimizer, criterion, ld=.0, BATCH_SIZE=25):
     model.train()
     cnt, sum_loss, sum_mmd, sumloss, minloss, maxloss = 0, 0, 0, 0, 100, 0
     
