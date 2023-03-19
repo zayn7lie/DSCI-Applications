@@ -21,12 +21,12 @@ NUM_WORKERS = 2
 modellr = 1e-4
 times = 100
 param = 0.1
-EPOCHS = 60
+EPOCHS = 0
 
 compare = [1e-6] #lambda
 criterion = BCELogitsFocalLoss() # torch.nn.BCEWithLogitsLoss() # 
-TF = True
-DropBlock = True
+TF = False
+DropBlock = False
 
 fr_dataset = odirData("./OIA-ODIR/On-site Test Set", TF=TF)
 to_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
