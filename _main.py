@@ -26,7 +26,7 @@ EPOCHS = 0
 compare = [1e-6] #lambda
 criterion = BCELogitsFocalLoss() # torch.nn.BCEWithLogitsLoss() # 
 TF = False
-DropBlock = False
+DropBlock = True
 
 fr_dataset = odirData("./OIA-ODIR/On-site Test Set", TF=TF)
 to_dataset = odirData("./OIA-ODIR/Off-site Test Set", TF=TF)
