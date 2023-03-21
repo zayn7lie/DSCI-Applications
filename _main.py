@@ -21,7 +21,7 @@ NUM_WORKERS = 2
 modellr = 1e-4
 times = 100
 param = 0.1
-EPOCHS = 60
+EPOCHS = 0
 
 compare = [1e-6] #lambda
 criterion = BCELogitsFocalLoss() # torch.nn.BCEWithLogitsLoss() # 
