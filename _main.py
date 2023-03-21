@@ -70,7 +70,9 @@ def main():
             # evaluate model
             eval(model, DEVICE, ts_loader_y)
 
+        # if you want to train all the fold, just add # before break
         break
+        
     return 0
 
     
