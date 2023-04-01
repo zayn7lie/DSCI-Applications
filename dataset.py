@@ -21,8 +21,7 @@ class odirData(Dataset):
             transforms.Resize(168),
             transforms.CenterCrop(224),
             transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            transforms.ToTensor()
         ])
         with open(path + "/Annotation/label.csv", 'r', encoding = 'utf-8-sig') as label_o:
             # 0: file_name, 1-8: judge
